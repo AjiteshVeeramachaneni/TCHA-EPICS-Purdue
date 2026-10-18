@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { EVENTS, EventDisplay, C } from './events'
 import { ChatbotPrototype } from './ChatbotPrototype'
+import './lib/firebase'
 
 /* ─── PERSISTENCE ─── */
 function loadProgress(): { current: number; unlocked: number } {
