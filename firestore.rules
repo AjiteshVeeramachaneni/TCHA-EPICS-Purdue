@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function activeAdmin() {
+      return request.auth != null && request.auth.token.admin == true
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true;
+    }
+    match /museumEvents/{eventId} {
+      allow read: if true;
+      // Validated, revision-checked edits go through adminSaveEvent.
+      allow write: if false;
+    }
+    match /admins/{uid} {
+      allow get: if request.auth != null && request.auth.uid == uid && activeAdmin();
+      allow list, write: if false;
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}

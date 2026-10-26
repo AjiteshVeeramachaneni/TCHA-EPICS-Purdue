@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { EVENTS, EventDisplay, C } from './events'
 import { ChatbotPrototype } from './ChatbotPrototype'
-import './lib/firebase'
+import { useMuseumContent } from './content'
 
 /* ─── PERSISTENCE ─── */
 function loadProgress(): { current: number; unlocked: number } {
@@ -56,6 +56,7 @@ function HomeScreen({ hasProgress, currentEvent, onBegin, onContinue }: {
   onBegin: () => void
   onContinue: () => void
 }) {
+  const { events: EVENTS } = useMuseumContent()
   const doneCount = Math.max(0, currentEvent - 1)
 
   return (
@@ -215,6 +216,7 @@ function HomeScreen({ hasProgress, currentEvent, onBegin, onContinue }: {
         <p className="font-serif font-bold text-base mb-1" style={{ color: C.parch, opacity: 0.9 }}>Tippecanoe County Historical Association</p>
         <p className="text-xs mb-1" style={{ color: C.parch, opacity: 0.65 }}>tippecanoehistory.org · TCHA sources</p>
         <p className="text-xs" style={{ color: C.parch, opacity: 0.5 }}><em>Battle of Tippecanoe</em> · <em>The Great Whig Rally</em></p>
+        <a href="/admin" className="inline-block mt-4 text-xs underline" style={{ color: C.parch }}>Admin sign in</a>
       </div>
     </div>
   )
@@ -255,6 +257,7 @@ function NavDot({ event, state, onClick }: {
 
 /* ─── COMPLETION SCREEN ─── */
 function CompletionScreen({ onRestart, onViewEvent }: { onRestart: () => void; onViewEvent: (eventId: number) => void }) {
+  const { events: EVENTS } = useMuseumContent()
   return (
     <div className="daylight-screen flex flex-col items-center justify-center min-h-screen px-6 text-center">
       <div className="fixed top-4 left-1/2 -translate-x-1/2 z-10 rounded-full px-4 py-2 text-xs font-bold tracking-widest uppercase" style={{ background: C.parch, color: C.brick }}>
@@ -289,6 +292,7 @@ function CompletionScreen({ onRestart, onViewEvent }: { onRestart: () => void; o
 
 /* ─── APP ─── */
 export default function App() {
+  const { events: EVENTS } = useMuseumContent()
   const [screen, setScreen] = useState<'home' | 'events' | 'complete'>('home')
   const [{ current, unlocked }, setProgress] = useState(loadProgress)
 
