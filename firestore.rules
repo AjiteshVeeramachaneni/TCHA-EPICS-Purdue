@@ -1,0 +1,26 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function verified() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    function admin() {
+      return verified()
+        && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.active == true;
+    }
+    match /admins/{uid} {
+      allow get: if verified() && request.auth.uid == uid;
+      allow list, write: if false;
+    }
+    match /settings/announcement {
+      allow read: if true;
+      allow create, update: if admin()
+        && request.resource.data.keys().hasOnly(['message', 'updatedAt'])
+        && request.resource.data.message is string
+        && request.resource.data.message.size() <= 1000
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if false;
+    }
+    match /{document=**} { allow read, write: if false; }
+  }
+}
