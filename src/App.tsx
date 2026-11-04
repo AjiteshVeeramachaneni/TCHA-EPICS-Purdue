@@ -99,7 +99,7 @@ function HomeScreen({ hasProgress, currentEvent, onBegin, onContinue }: {
         <p className="text-base max-w-md mx-auto leading-relaxed mb-2" style={{ color: C.ink, opacity: 0.78 }}>
           Explore 10 key events through games, puzzles, and activities.
         </p>
-        <p className="text-sm mb-10" style={{ color: C.ink, opacity: 0.55 }}>
+        <p className="text-sm mb-10" style={{ color: C.ink, opacity: 0.78 }}>
           Easy to read · Based on TCHA sources
         </p>
 
@@ -142,7 +142,7 @@ function HomeScreen({ hasProgress, currentEvent, onBegin, onContinue }: {
         ].map(s => (
           <div key={s.n} className="text-center">
             <div className="font-serif font-bold text-3xl" style={{ color: C.gold }}>{s.n}</div>
-            <div className="text-xs mt-0.5" style={{ color: C.ink, opacity: 0.62 }}>{s.label}</div>
+            <div className="text-xs mt-0.5" style={{ color: C.ink, opacity: 0.78 }}>{s.label}</div>
           </div>
         ))}
       </div>
@@ -155,7 +155,7 @@ function HomeScreen({ hasProgress, currentEvent, onBegin, onContinue }: {
             <div className="h-2 rounded-full mb-2" style={{ background: 'rgba(31,46,61,0.08)' }}>
               <div className="h-2 rounded-full transition-all" style={{ width: `${(doneCount / 10) * 100}%`, background: `linear-gradient(90deg, ${C.forest}, ${C.gold})` }} />
             </div>
-            <p className="text-xs" style={{ color: C.ink, opacity: 0.62 }}>{doneCount} of 10 events completed</p>
+            <p className="text-xs" style={{ color: C.ink, opacity: 0.78 }}>{doneCount} of 10 events completed</p>
           </div>
         </div>
       )}
@@ -177,10 +177,10 @@ function HomeScreen({ hasProgress, currentEvent, onBegin, onContinue }: {
                 <p className="text-xs font-bold mb-1" style={{ color: isDone ? C.forestL : isCurrent ? e.accent : `${e.accent}99`, opacity: isDone ? 1 : 0.9 }}>
                   Event {e.id}
                 </p>
-                <p className="text-xs font-semibold leading-tight" style={{ color: C.ink, opacity: isDone ? 0.9 : isCurrent ? 1 : 0.65 }}>
+                <p className="text-xs font-semibold leading-tight" style={{ color: C.ink, opacity: isDone ? 0.9 : isCurrent ? 1 : 0.78 }}>
                   {e.title}
                 </p>
-                <p className="text-xs mt-1" style={{ color: C.ink, opacity: 0.48 }}>{e.year}</p>
+                <p className="text-xs mt-1" style={{ color: C.ink, opacity: 0.75 }}>{e.year}</p>
               </div>
             )
           })}
@@ -203,7 +203,7 @@ function HomeScreen({ hasProgress, currentEvent, onBegin, onContinue }: {
               <span className="text-2xl">{a.icon}</span>
               <div>
                 <p className="text-sm font-semibold" style={{ color: C.ink }}>{a.label}</p>
-                <p className="text-xs" style={{ color: C.ink, opacity: 0.62 }}>{a.desc}</p>
+                <p className="text-xs" style={{ color: C.ink, opacity: 0.78 }}>{a.desc}</p>
               </div>
             </div>
           ))}
@@ -213,8 +213,8 @@ function HomeScreen({ hasProgress, currentEvent, onBegin, onContinue }: {
       {/* Footer */}
       <div className="relative text-center py-8 px-6" style={{ zIndex: 1, borderTop: '1px solid rgba(31,46,61,0.06)', background: C.navy }}>
         <p className="font-serif font-bold text-base mb-1" style={{ color: C.parch, opacity: 0.9 }}>Tippecanoe County Historical Association</p>
-        <p className="text-xs mb-1" style={{ color: C.parch, opacity: 0.65 }}>tippecanoehistory.org · TCHA sources</p>
-        <p className="text-xs" style={{ color: C.parch, opacity: 0.5 }}><em>Battle of Tippecanoe</em> · <em>The Great Whig Rally</em></p>
+        <p className="text-xs mb-1" style={{ color: C.parch, opacity: 0.85 }}>tippecanoehistory.org · TCHA sources</p>
+        <p className="text-xs" style={{ color: C.parch, opacity: 0.75 }}><em>Battle of Tippecanoe</em> · <em>The Great Whig Rally</em></p>
       </div>
     </div>
   )
@@ -230,7 +230,7 @@ function NavDot({ event, state, onClick }: {
   return (
     <button onClick={locked ? undefined : onClick} disabled={locked}
       className="flex flex-col items-center gap-1 transition-all duration-200"
-      style={{ cursor: locked ? 'default' : 'pointer', opacity: locked ? 0.28 : 1 }}
+      style={{ cursor: locked ? 'default' : 'pointer', opacity: locked ? 0.75 : 1 }}
       title={`${event.id}. ${event.title}`}>
       <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300"
         style={{
@@ -242,7 +242,7 @@ function NavDot({ event, state, onClick }: {
         {state === 'done' ? '✓' : locked ? '🔒' : event.id}
       </div>
       <span className="text-xs hidden lg:block" style={{
-        color: state === 'current' ? event.accent : state === 'done' ? C.forestL : 'rgba(31,46,61,0.3)',
+        color: state === 'current' ? event.accent : state === 'done' ? C.forestL : C.ink,
         maxWidth: 58, textAlign: 'center', lineHeight: 1.3, fontSize: 10,
         overflow: 'hidden', display: '-webkit-box',
         WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const,
@@ -276,7 +276,7 @@ function CompletionScreen({ onRestart, onViewEvent }: { onRestart: () => void; o
           ))}
         </div>
       </div>
-      <p className="text-xs mb-6" style={{ color: C.ink, opacity: 0.55 }}>
+      <p className="text-xs mb-6" style={{ color: C.ink, opacity: 0.75 }}>
         Tippecanoe County Historical Association · <span style={{ color: C.goldL }}>tippecanoehistory.org</span>
       </p>
       <button onClick={onRestart} className="px-8 py-3 rounded-xl font-bold" style={{ background: C.steel, color: C.parch }}>
@@ -364,7 +364,7 @@ export default function App() {
             <span className="text-lg">⚔️</span>
             <div className="text-left">
               <p className="font-serif font-bold text-sm leading-none" style={{ color: C.ink }}>Battle of Tippecanoe</p>
-              <p className="text-xs mt-0.5" style={{ color: C.ink, opacity: 0.55 }}>← Home</p>
+              <p className="text-xs mt-0.5" style={{ color: C.ink, opacity: 0.75 }}>← Home</p>
             </div>
           </button>
           <div className="flex items-center gap-2">
@@ -393,7 +393,7 @@ export default function App() {
             Event {current} · {currentMeta.title}
           </p>
           <div className="flex-1 h-px" style={{ background: `linear-gradient(to right, ${currentMeta.accent}33, transparent)` }} />
-          <p className="text-xs" style={{ color: C.ink, opacity: 0.55 }}>{currentMeta.year}</p>
+          <p className="text-xs" style={{ color: C.ink, opacity: 0.75 }}>{currentMeta.year}</p>
         </div>
       </nav>
 

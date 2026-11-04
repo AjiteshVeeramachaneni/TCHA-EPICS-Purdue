@@ -149,7 +149,7 @@ function ChapterIntro({ id, onComplete }: { id: number; onComplete: () => void }
               <span className="text-3xl">{f.emoji}</span>
               <div>
                 <p className="font-bold text-sm" style={{ color: C.ink }}>{f.name}</p>
-                <p className="text-xs" style={{ color: C.ink, opacity: 0.52 }}>{f.role}</p>
+                <p className="text-xs" style={{ color: C.ink, opacity: 0.75 }}>{f.role}</p>
               </div>
             </div>
           ))}
@@ -182,25 +182,28 @@ function CtxBox({ children }: { children: React.ReactNode }) {
   )
 }
 
-function FactCards({ cards }: { cards: { icon: string; title: string; body: string }[] }) {
+function FactCards({ cards, onReveal }: { cards: { icon: string; title: string; body: string }[]; onReveal?: (index: number) => void }) {
   const [flipped, setFlipped] = useState<Set<number>>(new Set())
   return (
     <div className="space-y-3">
       {cards.map((c, i) => (
-        <div key={i} onClick={() => setFlipped(s => { const n = new Set(s); n.has(i) ? n.delete(i) : n.add(i); return n })}
+        <div key={i} onClick={() => {
+          setFlipped(s => { const n = new Set(s); n.has(i) ? n.delete(i) : n.add(i); return n })
+          onReveal?.(i)
+        }}
           className="rounded-2xl p-4 cursor-pointer transition-all duration-300"
           style={{ background: flipped.has(i) ? 'rgba(196,146,58,0.1)' : 'rgba(31,46,61,0.05)', border: `1px solid ${flipped.has(i) ? C.gold : 'rgba(31,46,61,0.1)'}` }}>
           <div className="flex items-center gap-3">
             <span className="text-2xl">{c.icon}</span>
             <div className="flex-1">
-              <p className="font-semibold text-sm" style={{ color: flipped.has(i) ? C.goldL : C.parch }}>{c.title}</p>
+              <p className="font-semibold text-sm" style={{ color: flipped.has(i) ? C.gold : C.ink }}>{c.title}</p>
               {flipped.has(i) && <p className="text-sm mt-1 leading-relaxed" style={{ color: C.ink, opacity: 0.8 }}>{c.body}</p>}
             </div>
-            <span className="text-lg" style={{ color: 'rgba(31,46,61,0.3)' }}>{flipped.has(i) ? '▲' : '▼'}</span>
+            <span className="text-lg" style={{ color: 'rgba(31,46,61,0.65)' }}>{flipped.has(i) ? '▲' : '▼'}</span>
           </div>
         </div>
       ))}
-      {flipped.size < cards.length && <p className="text-center text-xs" style={{ color: C.ink, opacity: 0.4 }}>Tap each card to reveal</p>}
+      {flipped.size < cards.length && <p className="text-center text-xs" style={{ color: C.ink, opacity: 0.75 }}>Tap each card to reveal</p>}
     </div>
   )
 }
@@ -211,7 +214,7 @@ function ChoiceBtn({ label, selected, correct, onClick, disabled }: { label: str
       className="w-full py-3 px-4 rounded-xl font-semibold text-left transition-all duration-200 text-sm"
       style={{ background: selected ? (correct ? C.forest : C.brick) : C.navyL, color: C.parch,
         border: `2px solid ${selected ? (correct ? C.forestL : C.brickL) : 'transparent'}`,
-        opacity: disabled && !selected ? 0.45 : 1 }}>
+        opacity: disabled && !selected ? 0.7 : 1 }}>
       {label} {selected && (correct ? ' ✓' : ' ✗')}
     </button>
   )
@@ -242,7 +245,7 @@ function E1S1({ onComplete }: StageProps) {
     <div className="flex flex-col items-center gap-5">
       <CtxBox>
         <p>In 1806, a Shawnee leader named <strong style={{ color: C.goldL }}>Tenskwatawa</strong> — "The Prophet" — claimed he received special powers from the Great Spirit. He was gathering thousands of followers at a village in Indiana called Prophet's Town.</p>
-        <p>Governor <strong style={{ color: C.goldL }}>William Henry Harrison</strong> did not believe him. Harrison sent Tenskwatawa a public challenge: <em style={{ color: C.parchD }}>"If you truly have power from the Great Spirit, make the sun go dark at noon!"</em></p>
+        <p>Governor <strong style={{ color: C.goldL }}>William Henry Harrison</strong> did not believe him. Harrison sent Tenskwatawa a public challenge: <em style={{ color: C.ink }}>"If you truly have power from the Great Spirit, make the sun go dark at noon!"</em></p>
         <p>What happened next stunned everyone. <strong>Slide the moon to find out!</strong></p>
       </CtxBox>
 
@@ -270,7 +273,7 @@ function E1S1({ onComplete }: StageProps) {
       </div>
 
       <div className="w-full max-w-xs">
-        <p className="text-center text-xs mb-2" style={{color:C.ink,opacity:0.5}}>← Slide the moon across the sun →</p>
+        <p className="text-center text-xs mb-2" style={{color:C.ink,opacity:0.75}}>← Slide the moon across the sun →</p>
         <input type="range" min={0} max={100} value={slider} onChange={e=>go(Number(e.target.value))} className="w-full" />
       </div>
 
@@ -283,7 +286,7 @@ function E1S1({ onComplete }: StageProps) {
                 className="py-2.5 rounded-xl font-bold text-base transition-all duration-200"
                 style={{background:choice===yr?(yr==='1806'?C.forest:C.brick):C.navyL,color:C.parch,
                   border:`2px solid ${choice===yr?(yr==='1806'?C.forestL:C.brickL):'transparent'}`,
-                  opacity:choice&&choice!==yr?0.4:1}}>
+                  opacity:choice&&choice!==yr?0.7:1}}>
                 {yr} {choice===yr&&(yr==='1806'?'✓':'✗')}
               </button>
             ))}
@@ -292,7 +295,7 @@ function E1S1({ onComplete }: StageProps) {
           {choice==='1806'&&<GoodAnswer text="Correct! June 16, 1806 — and it actually happened!" />}
         </div>
       )}
-      {!eclipsed && <p className="text-xs text-center" style={{color:C.ink,opacity:0.35}}>First, slide the moon all the way to the center of the sun…</p>}
+      {!eclipsed && <p className="text-xs text-center" style={{color:C.ink,opacity:0.75}}>First, slide the moon all the way to the center of the sun…</p>}
     </div>
   )
 }
@@ -330,12 +333,12 @@ function E1S3({ onComplete }: StageProps) {
     {icon:'🏘️',title:"Prophet's Town grows",body:"After the eclipse, Prophet's Town at the junction of the Tippecanoe and Wabash rivers swelled to over 1,000 people — Shawnee, Delaware, Potawatomi, Kickapoo, and others. It became the largest Native settlement in Indiana."},
     {icon:'📖',title:"Tenskwatawa's message",body:"The Prophet taught that Native people should return to traditional ways and reject European goods — no metal tools, no alcohol, no clothing made by white traders. He believed this would restore the power that Native nations had lost."},
   ]
-  const click = (i:number) => { setSeen(s=>{const n=new Set(s);n.add(i);return n}); if (seen.size===2) setTimeout(onComplete,500) }
+  const click = (i:number) => setSeen(s=>{if(s.has(i))return s;const n=new Set(s);n.add(i);return n})
   useEffect(()=>{ if(seen.size===3) onComplete() },[seen])
   return (
     <div className="flex flex-col gap-4">
       <p className="text-sm" style={{color:C.ink,opacity:0.7}}>Tap each card to learn more about this moment in history.</p>
-      <FactCards cards={cards} />
+      <FactCards cards={cards} onReveal={click} />
       {seen.size===3&&<GoodAnswer text="You've uncovered all three facts. On to the next event!" />}
     </div>
   )
@@ -394,7 +397,7 @@ function E2S1({ onComplete }: StageProps) {
           <button key={o} onClick={()=>pick(o)}
             className="py-3 px-4 rounded-xl font-semibold text-left text-sm transition-all duration-200"
             style={{background:sel===o?(o===char.name?C.forest:C.brick):C.navyL,color:C.parch,
-              opacity:sel&&sel!==o?0.4:1,border:`2px solid ${sel===o?(o===char.name?C.forestL:C.brickL):'transparent'}`}}>
+              opacity:sel&&sel!==o?0.7:1,border:`2px solid ${sel===o?(o===char.name?C.forestL:C.brickL):'transparent'}`}}>
             {o}{sel===o&&(o===char.name?' ✓':' ✗')}
           </button>
         ))}
@@ -404,34 +407,44 @@ function E2S1({ onComplete }: StageProps) {
 }
 
 const DEMANDS = [
-  {blank:'Fort Wayne',clue:'The 1809 treaty that sold 3 million acres',display:'Fort Wayne Treaty'},
-  {blank:'all nations',clue:'Tecumseh\'s argument that land belongs to everyone',display:'all nations together'},
-  {blank:'no more',clue:'Tecumseh\'s demand about future sales',display:'no more land sales'},
+  {clue:'The 1809 treaty that sold 3 million acres',prompt:'Cancel the',ending:'immediately.'},
+  {clue:'Tecumseh argued no single nation could sell land on its own',prompt:'No land could be sold without agreement from',ending:'.'},
+  {clue:'Tecumseh opposed further land sales',prompt:'Stop',ending:'.'},
 ]
 
 function E2S2({ onComplete }: StageProps) {
   const [answers,setAnswers]=useState<(string|null)[]>([null,null,null])
   const [checked,setChecked]=useState(false)
-  const choices=[['Fort Wayne Treaty','Greenville Treaty','Paris Treaty'],['only the Shawnee','all nations together','the United States'],['more land sales','no more land sales','smaller payments']]
-  const correct=['Fort Wayne Treaty','all nations together','no more land sales']
+  const choices=[['Fort Wayne Treaty','Greenville Treaty','Paris Treaty'],['only the Shawnee','every Native nation','the United States'],['all future land sales','more land sales','smaller payments']]
+  const correct=['Fort Wayne Treaty','every Native nation','all future land sales']
+  const allCorrect=answers.every((a,i)=>a===correct[i])
   const check=()=>{
     setChecked(true)
-    if(answers.every((a,i)=>a===correct[i]))setTimeout(onComplete,1400)
+    if(allCorrect)setTimeout(onComplete,1400)
   }
   return(
     <div className="flex flex-col gap-4">
       <CtxBox>
-        <p>Tecumseh came with three clear demands. He spoke powerfully for over an hour. Even Harrison, who opposed him, later said Tecumseh was <em style={{color:C.parchD}}>"one of those uncommon geniuses which spring up occasionally to produce revolutions."</em></p>
+        <p>Tecumseh came with three clear demands. He spoke powerfully for over an hour. Even Harrison, who opposed him, later said Tecumseh was <em style={{color:C.ink}}>"one of those uncommon geniuses which spring up occasionally to produce revolutions."</em></p>
         <p>Can you figure out what Tecumseh was demanding?</p>
       </CtxBox>
       <p className="text-sm font-semibold" style={{color:C.ink}}>Complete Tecumseh's demands by choosing the right words:</p>
       {DEMANDS.map((d,i)=>(
         <div key={i} className="rounded-2xl p-4" style={{background:'rgba(31,46,61,0.04)',border:'1px solid rgba(31,46,61,0.1)'}}>
-          <p className="text-xs mb-2" style={{color:C.ink,opacity:0.55}}>💡 Clue: {d.clue}</p>
-          <p className="text-sm mb-2" style={{color:C.ink}}>Demand {i+1}: Cancel the <strong style={{color:checked?(answers[i]===correct[i]?C.forestL:C.brickL):C.goldL}}>{answers[i]??'___'}</strong> {i===0?'immediately.':(i===1?'without consent from _____.':'Make _____ from this point on.')}</p>
+          <p className="text-xs mb-2" style={{color:C.ink,opacity:0.75}}>💡 Clue: {d.clue}</p>
+          <p className="text-sm mb-2 leading-relaxed" style={{color:C.ink}}>
+            Demand {i+1}: {d.prompt}{' '}
+            <strong className="inline-block rounded px-1.5 py-0.5" style={{
+              color:checked?(answers[i]===correct[i]?C.forest:C.brick):C.ink,
+              background:checked?(answers[i]===correct[i]?'rgba(47,75,60,0.12)':'rgba(139,58,43,0.12)'):'rgba(196,146,58,0.14)',
+            }}>{answers[i]??'Choose an answer'}</strong>{' '}{d.ending}
+          </p>
           <div className="flex flex-wrap gap-2">
             {choices[i].map(c=>(
-              <button key={c} onClick={()=>setAnswers(a=>{const n=[...a];n[i]=c;return n})} disabled={checked}
+              <button key={c} onClick={()=>{
+                setAnswers(a=>{const n=[...a];n[i]=c;return n})
+                setChecked(false)
+              }} disabled={checked&&allCorrect}
                 className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all"
                 style={{background:answers[i]===c?(checked?(c===correct[i]?C.forest:C.brick):C.steel):C.navyL,
                   color:C.parch,border:`1px solid ${answers[i]===c?'rgba(255,255,255,0.2)':'rgba(31,46,61,0.12)'}`}}>
@@ -441,14 +454,14 @@ function E2S2({ onComplete }: StageProps) {
           </div>
         </div>
       ))}
-      <button onClick={check} disabled={answers.includes(null)||checked}
+      <button onClick={check} disabled={answers.includes(null)||(checked&&allCorrect)}
         className="w-full py-3 rounded-xl font-bold"
-        style={{background:answers.includes(null)||checked?'rgba(31,46,61,0.08)':C.forest,
-          color:answers.includes(null)||checked?'rgba(31,46,61,0.3)':C.parch}}>
+        style={{background:answers.includes(null)||(checked&&allCorrect)?'rgba(31,46,61,0.08)':C.forest,
+          color:answers.includes(null)||(checked&&allCorrect)?'rgba(31,46,61,0.65)':C.parch}}>
         Check My Answers
       </button>
-      {checked&&answers.every((a,i)=>a===correct[i])&&<GoodAnswer text="Perfect! You captured all three of Tecumseh's demands." />}
-      {checked&&!answers.every((a,i)=>a===correct[i])&&<BadAnswer text="Some answers need adjusting. Review the clues above." />}
+      {checked&&allCorrect&&<GoodAnswer text="Perfect! You captured all three of Tecumseh's demands." />}
+      {checked&&!allCorrect&&<BadAnswer text="Some answers need adjusting. Review the clues above." />}
     </div>
   )
 }
@@ -473,8 +486,7 @@ function E2S3({ onComplete }: StageProps) {
           {steps.map((s,i)=>(
             <div key={i} className="relative rounded-2xl p-4 transition-all duration-400"
               style={{background:i<=step?'rgba(31,46,61,0.06)':'rgba(31,46,61,0.02)',
-                border:`1px solid ${i<=step?'rgba(31,46,61,0.15)':'rgba(31,46,61,0.05)'}`,
-                opacity:i<=step?1:0.35}}>
+                border:`1px solid ${i<=step?'rgba(31,46,61,0.15)':'rgba(31,46,61,0.08)'}`}}>
               <div className="absolute -left-8 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-lg"
                 style={{background:i<=step?C.navyL:'rgba(31,46,61,0.05)',border:`2px solid ${i<=step?C.gold:'rgba(31,46,61,0.1)'}`}}>
                 {i<=step?s.icon:'○'}
@@ -540,11 +552,11 @@ function E3S1({ onComplete }: StageProps) {
                   {done?'✓':wp.id}
                 </text>
                 <text x={wp.x+(wp.x>180?18:-18)} y={wp.y} textAnchor={wp.x>180?'start':'end'}
-                  dominantBaseline="middle" fill={done?C.goldL:isNext?C.parch:'rgba(31,46,61,0.4)'} fontSize={11}>
+                  dominantBaseline="middle" fill={done?C.gold:isNext?C.navy:'rgba(31,46,61,0.75)'} fontSize={11}>
                   {wp.label}
                 </text>
                 <text x={wp.x+(wp.x>180?18:-18)} y={wp.y+14} textAnchor={wp.x>180?'start':'end'}
-                  dominantBaseline="middle" fill="rgba(31,46,61,0.35)" fontSize={10}>
+                  dominantBaseline="middle" fill="rgba(31,46,61,0.75)" fontSize={10}>
                   {wp.date}
                 </text>
               </g>
@@ -556,7 +568,7 @@ function E3S1({ onComplete }: StageProps) {
         <div className="h-2 rounded-full" style={{background:'rgba(31,46,61,0.1)'}}>
           <div className="h-2 rounded-full transition-all duration-500" style={{width:`${(clicked.length/5)*100}%`,background:`linear-gradient(90deg,${C.forest},${C.gold})`}}/>
         </div>
-        <p className="text-xs mt-1 text-center" style={{color:C.ink,opacity:0.45}}>{clicked.length} of 5 stops reached</p>
+        <p className="text-xs mt-1 text-center" style={{color:C.ink,opacity:0.75}}>{clicked.length} of 5 stops reached</p>
       </div>
       {info&&(
         <div className="w-full max-w-sm rounded-2xl p-3" style={{background:`rgba(47,75,60,0.3)`,border:`1px solid ${C.forest}`}}>
@@ -604,7 +616,7 @@ function E3S2({ onComplete }: StageProps) {
               className="py-3 px-4 rounded-xl text-left transition-all duration-200"
               style={{background:showResult?(sel&&isCorrect?'rgba(47,75,60,0.4)':sel&&!isCorrect?'rgba(139,58,43,0.3)':!sel&&isCorrect?'rgba(139,58,43,0.15)':'rgba(31,46,61,0.03)'):sel?C.navyL:'rgba(31,46,61,0.04)',
                 border:`2px solid ${showResult?(sel&&isCorrect?C.forest:sel&&!isCorrect?C.brick:!sel&&isCorrect?C.brickL:'rgba(31,46,61,0.06)'):sel?'rgba(31,46,61,0.3)':'rgba(31,46,61,0.08)'}`,
-                color:C.parch}}>
+                color:showResult||!sel?C.ink:C.parch}}>
               <div className="flex items-center justify-between">
                 <span className="text-sm font-semibold">{item.label}</span>
                 {sel&&!showResult&&<span style={{color:C.goldL}}>✓</span>}
@@ -612,14 +624,14 @@ function E3S2({ onComplete }: StageProps) {
                 {showResult&&sel&&!isCorrect&&<span style={{color:C.brickL}}>✗ Leave this!</span>}
                 {showResult&&!sel&&isCorrect&&<span style={{color:C.brickL}}>✗ Should pack!</span>}
               </div>
-              {showResult&&<p className="text-xs mt-1" style={{color:C.ink,opacity:0.65}}>{item.reason}</p>}
+              {showResult&&<p className="text-xs mt-1" style={{color:C.ink,opacity:0.75}}>{item.reason}</p>}
             </button>
           )
         })}
       </div>
       <button onClick={check} disabled={selected.size===0||checked}
         className="w-full py-3 rounded-xl font-bold"
-        style={{background:selected.size===0||checked?'rgba(31,46,61,0.08)':C.forest,color:selected.size===0||checked?'rgba(31,46,61,0.3)':C.parch}}>
+        style={{background:selected.size===0||checked?'rgba(31,46,61,0.08)':C.forest,color:selected.size===0||checked?'rgba(31,46,61,0.65)':C.parch}}>
         Review My Choices
       </button>
     </div>
@@ -640,10 +652,10 @@ function E3S3({ onComplete }: StageProps) {
       <p className="font-semibold text-sm" style={{color:C.ink}}>How many days do you think the full march took?</p>
       <div className="text-center py-2">
         <div className="text-5xl font-serif font-bold" style={{color:C.gold}}>{guess}</div>
-        <div className="text-xs mt-1" style={{color:C.parch,opacity:0.5}}>days</div>
+        <div className="text-xs mt-1" style={{color:C.ink,opacity:0.75}}>days</div>
       </div>
       <input type="range" min={3} max={20} value={guess} onChange={e=>setGuess(Number(e.target.value))} className="w-full" disabled={submitted}/>
-      <div className="flex justify-between text-xs" style={{color:C.parch,opacity:0.4}}><span>3 days</span><span>20 days</span></div>
+      <div className="flex justify-between text-xs" style={{color:C.ink,opacity:0.75}}><span>3 days</span><span>20 days</span></div>
       {!submitted&&<button onClick={handleSubmit} className="w-full py-3 rounded-xl font-bold" style={{background:C.steel,color:C.parch}}>Submit My Guess!</button>}
       {submitted&&(
         <div className="rounded-2xl p-4" style={{background:`rgba(196,146,58,0.1)`,border:`1px solid ${C.gold}`}}>
@@ -683,7 +695,7 @@ function E4S1({ onComplete }: StageProps) {
         <p>At exactly <strong style={{color:C.goldL}}>4:15 in the morning</strong>, a single shot fired — and the battle exploded. The attack fell first on the north side of the camp, where two companies were sleeping.</p>
         <p>Use the word bank to fill in the story of the first minutes of battle.</p>
       </CtxBox>
-      <div className="rounded-2xl p-5 text-sm leading-loose" style={{background:'rgba(31,46,61,0.04)',border:'1px solid rgba(31,46,61,0.1)',color:C.parch}}>
+      <div className="rounded-2xl p-5 text-sm leading-loose" style={{background:'rgba(31,46,61,0.04)',border:'1px solid rgba(31,46,61,0.1)',color:C.ink}}>
         <span>At </span>
         {[0,1,2,3].map(i=>{
           const val=filled[i]; const correct=checked?val===ATTACK_BLANKS[i].answer:null
@@ -693,7 +705,7 @@ function E4S1({ onComplete }: StageProps) {
                 className="inline-block cursor-pointer font-bold transition-all duration-200"
                 style={{minWidth:80,padding:'2px 8px',margin:'0 3px',borderRadius:6,textAlign:'center',
                   background:val?(correct===true?C.forest:correct===false?C.brick:C.steel):'rgba(31,46,61,0.08)',
-                  color:val?C.parch:'rgba(31,46,61,0.3)',border:`1px dashed ${val?'transparent':'rgba(31,46,61,0.2)'}`}}>
+                  color:val?C.parch:C.ink,border:`1px dashed ${val?'transparent':'rgba(31,46,61,0.28)'}`}}>
                 {val??`___`}
               </span>
               {i===0&&" a.m., a "}
@@ -705,12 +717,12 @@ function E4S1({ onComplete }: StageProps) {
         })}
       </div>
       <div>
-        <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{color:C.goldL}}>Word Bank <span style={{color:'rgba(31,46,61,0.4)',fontWeight:400,textTransform:'none',letterSpacing:0}}>— click a blank first, then choose a word</span></p>
+        <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{color:C.goldL}}>Word Bank <span style={{color:'rgba(31,46,61,0.72)',fontWeight:400,textTransform:'none',letterSpacing:0}}>— click a blank first, then choose a word</span></p>
         <div className="flex flex-wrap gap-2">
           {ATTACK_BANK.map(w=>{
             const used=filled.includes(w)
             return(<button key={w} onClick={()=>pick(w)} className="px-3 py-1.5 rounded-lg text-sm font-semibold transition-all"
-              style={{background:used?'rgba(31,46,61,0.04)':C.navyL,color:used?'rgba(31,46,61,0.25)':C.parch,
+              style={{background:used?'rgba(31,46,61,0.08)':C.navyL,color:used?C.ink:C.parch,
                 border:`1px solid ${used?'rgba(31,46,61,0.06)':'rgba(31,46,61,0.18)'}`,cursor:used?'default':'pointer'}}>
               {w}
             </button>)
@@ -718,9 +730,9 @@ function E4S1({ onComplete }: StageProps) {
         </div>
       </div>
       <div className="flex gap-3">
-        <button onClick={()=>{setFilled([null,null,null,null]);setChecked(false)}} className="flex-1 py-2.5 rounded-xl font-semibold text-sm" style={{background:'rgba(31,46,61,0.06)',color:C.parch}}>Clear All</button>
+        <button onClick={()=>{setFilled([null,null,null,null]);setChecked(false)}} className="flex-1 py-2.5 rounded-xl font-semibold text-sm" style={{background:'rgba(31,46,61,0.08)',color:C.ink}}>Clear All</button>
         <button onClick={check} disabled={filled.includes(null)||checked} className="flex-1 py-2.5 rounded-xl font-bold"
-          style={{background:filled.includes(null)||checked?'rgba(31,46,61,0.08)':C.forest,color:filled.includes(null)||checked?'rgba(31,46,61,0.3)':C.parch}}>Check Answers</button>
+          style={{background:filled.includes(null)||checked?'rgba(31,46,61,0.08)':C.forest,color:filled.includes(null)||checked?'rgba(31,46,61,0.65)':C.parch}}>Check Answers</button>
       </div>
       {allCorrect&&<GoodAnswer text="Correct! The battle erupted in the pre-dawn cold." />}
       {checked&&!allCorrect&&<BadAnswer text="A few blanks need fixing. Clear and try again!" />}
@@ -761,7 +773,7 @@ function E4S2({ onComplete }: StageProps) {
               style={{position:'absolute',left:c.x-40,top:c.y-16,width:80,padding:'4px 6px',
                 borderRadius:8,background:isSeen?`${c.color}44`:C.navyL,
                 border:`2px solid ${isSeen?c.color:'rgba(31,46,61,0.15)'}`,
-                color:isSeen?c.color:C.parch,fontSize:11,fontWeight:600,
+                color:isSeen?C.ink:C.parch,fontSize:11,fontWeight:600,
                 cursor:'pointer',transition:'all 0.2s',
                 boxShadow:isSeen?`0 0 8px ${c.color}44`:'none'}}>
               {c.label}{isSeen?' ✓':''}
@@ -769,7 +781,7 @@ function E4S2({ onComplete }: StageProps) {
           )
         })}
       </div>
-      <p className="text-xs text-center" style={{color:C.ink,opacity:0.4}}>Tap each unit · {seen.size}/{COMPANIES.length} discovered</p>
+      <p className="text-xs text-center" style={{color:C.ink,opacity:0.75}}>Tap each unit · {seen.size}/{COMPANIES.length} discovered</p>
       {active&&(
         <div className="w-full max-w-sm rounded-2xl p-4" style={{background:`${active.color}18`,border:`1px solid ${active.color}44`}}>
           <p className="text-xs font-bold mb-1" style={{color:active.color}}>⚔️ {active.label}</p>
@@ -809,13 +821,13 @@ function E4S3({ onComplete }: StageProps) {
             <div key={idx} className="flex items-center gap-2">
               <div className="flex flex-col gap-1">
                 <button onClick={()=>moveUp(i)} disabled={i===0||checked} className="w-6 h-5 rounded text-xs font-bold transition-all"
-                  style={{background:i===0||checked?'rgba(31,46,61,0.05)':'rgba(31,46,61,0.1)',color:'rgba(31,46,61,0.5)'}}>▲</button>
+                  style={{background:i===0||checked?'rgba(31,46,61,0.05)':'rgba(31,46,61,0.1)',color:'rgba(31,46,61,0.75)'}}>▲</button>
                 <button onClick={()=>moveDown(i)} disabled={i===order.length-1||checked} className="w-6 h-5 rounded text-xs font-bold"
-                  style={{background:i===order.length-1||checked?'rgba(31,46,61,0.05)':'rgba(31,46,61,0.1)',color:'rgba(31,46,61,0.5)'}}>▼</button>
+                  style={{background:i===order.length-1||checked?'rgba(31,46,61,0.05)':'rgba(31,46,61,0.1)',color:'rgba(31,46,61,0.75)'}}>▼</button>
               </div>
               <div className="flex-1 rounded-xl px-3 py-2.5 transition-all duration-300"
                 style={{background:correct2?'rgba(47,75,60,0.35)':wrong2?'rgba(139,58,43,0.25)':C.navyL,
-                  border:`1px solid ${correct2?C.forest:wrong2?C.brick:'rgba(31,46,61,0.1)'}`,fontSize:12,color:C.parch}}>
+                  border:`1px solid ${correct2?C.forest:wrong2?C.brick:'rgba(31,46,61,0.1)'}`,fontSize:12,color:checked?C.ink:C.parch}}>
                 <span className="font-bold mr-2" style={{color:C.goldL,opacity:0.7}}>{i+1}.</span>
                 {events[idx].text}
                 {correct2&&<span style={{color:C.forestL}}> ✓</span>}
@@ -825,7 +837,7 @@ function E4S3({ onComplete }: StageProps) {
         })}
       </div>
       <button onClick={check} disabled={checked} className="w-full py-3 rounded-xl font-bold"
-        style={{background:checked?'rgba(31,46,61,0.08)':C.forest,color:checked?'rgba(31,46,61,0.3)':C.parch}}>
+        style={{background:checked?'rgba(31,46,61,0.08)':C.forest,color:checked?'rgba(31,46,61,0.65)':C.parch}}>
         Check My Order
       </button>
       {checked&&order.every((v,i)=>v===i)&&<GoodAnswer text="Perfect order! The battle lasted about 2 hours before Harrison secured the ridge." />}
@@ -852,7 +864,7 @@ function E5S1({ onComplete }: StageProps) {
       <div className="flex rounded-xl overflow-hidden" style={{border:'1px solid rgba(31,46,61,0.12)'}}>
         {(['shabonee','harrison'] as const).map(v=>(
           <button key={v} onClick={()=>toggle(v)} className="flex-1 py-2 text-sm font-semibold transition-all"
-            style={{background:view===v?C.steel:'transparent',color:view===v?C.parch:'rgba(31,46,61,0.45)'}}>
+            style={{background:view===v?C.steel:'transparent',color:view===v?C.parch:C.ink}}>
             {v==='shabonee'?'🪶 Shabonee':'📜 Harrison'}
             {!seen.has(v)&&<span className="ml-1" style={{color:C.gold}}>●</span>}
           </button>
@@ -890,7 +902,7 @@ function E5S1({ onComplete }: StageProps) {
           {choice&&choice!=='horse'&&<BadAnswer text="Think about what Shabonee specifically mentioned — the white horse." />}
         </div>
       )}
-      {seen.size<2&&<p className="text-center text-xs" style={{color:C.ink,opacity:0.4}}>Read both accounts to unlock the question →</p>}
+      {seen.size<2&&<p className="text-center text-xs" style={{color:C.ink,opacity:0.75}}>Read both accounts to unlock the question →</p>}
     </div>
   )
 }
@@ -914,7 +926,7 @@ function E5S2({ onComplete }: StageProps) {
         {diffs.map(d=>(
           <button key={d.id} onClick={()=>click(d.id)} className="w-full text-left rounded-2xl p-4 transition-all duration-300"
             style={{background:found.has(d.id)?'rgba(74,111,165,0.15)':C.navyL,
-              border:`2px solid ${found.has(d.id)?C.steel:'rgba(31,46,61,0.1)'}`,color:C.parch}}>
+              border:`2px solid ${found.has(d.id)?C.steel:'rgba(31,46,61,0.1)'}`,color:found.has(d.id)?C.ink:C.parch}}>
             <div className="flex items-start gap-3">
               <span className="text-xl mt-0.5">{found.has(d.id)?'🔎':'❓'}</span>
               <p className="text-sm leading-relaxed">{found.has(d.id)?d.text:'Click to reveal this difference…'}</p>
@@ -922,7 +934,7 @@ function E5S2({ onComplete }: StageProps) {
           </button>
         ))}
       </div>
-      <p className="text-xs text-center" style={{color:C.ink,opacity:0.4}}>{found.size}/{diffs.length} differences found</p>
+      <p className="text-xs text-center" style={{color:C.ink,opacity:0.75}}>{found.size}/{diffs.length} differences found</p>
       {found.size===3&&<GoodAnswer text="All three key differences found! Great historical detective work." />}
     </div>
   )
@@ -1008,10 +1020,10 @@ function E6S2({ onComplete }: StageProps) {
       <div className="space-y-3">
         {chain.map((c,i)=>(
           <div key={i} className="rounded-2xl p-4 transition-all duration-500"
-            style={{background:i<=step?`${c.color}18`:C.navyL,border:`2px solid ${i<=step?c.color:'rgba(31,46,61,0.08)'}`,opacity:i<=step?1:0.35}}>
+            style={{background:i<=step?`${c.color}18`:'rgba(31,46,61,0.04)',border:`2px solid ${i<=step?c.color:'rgba(31,46,61,0.12)'}`}}>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-xl">{i<=step?c.icon:'○'}</span>
-              <p className="text-xs font-bold uppercase tracking-widest" style={{color:i<=step?c.color:'rgba(31,46,61,0.3)'}}>{c.label}</p>
+              <span className="text-xl">{i<=step?c.icon:<span style={{color:C.ink}}>○</span>}</span>
+              <p className="text-xs font-bold uppercase tracking-widest" style={{color:i<=step?c.color:C.ink}}>{c.label}</p>
             </div>
             {i<=step&&<p className="text-sm" style={{color:C.ink}}>{c.text}</p>}
           </div>
@@ -1048,7 +1060,7 @@ function E6S3({ onComplete }: StageProps) {
               <button key={String(v)} onClick={()=>pick(i,v)} disabled={checked}
                 className="flex-1 py-2 rounded-xl text-sm font-bold transition-all"
                 style={{background:answers[i]===v?(checked?(v===q.answer?C.forest:C.brick):C.steel):'rgba(31,46,61,0.08)',
-                  color:C.parch,border:`1px solid ${answers[i]===v?'rgba(255,255,255,0.2)':'transparent'}`}}>
+                  color:answers[i]===v?C.parch:C.ink,border:`1px solid ${answers[i]===v?'rgba(255,255,255,0.2)':'transparent'}`}}>
                 {v?'True':'False'}
               </button>
             ))}
@@ -1057,7 +1069,7 @@ function E6S3({ onComplete }: StageProps) {
         </div>
       ))}
       <button onClick={check} disabled={answers.includes(null)||checked} className="w-full py-3 rounded-xl font-bold"
-        style={{background:answers.includes(null)||checked?'rgba(31,46,61,0.08)':C.forest,color:answers.includes(null)||checked?'rgba(31,46,61,0.3)':C.parch}}>
+        style={{background:answers.includes(null)||checked?'rgba(31,46,61,0.08)':C.forest,color:answers.includes(null)||checked?'rgba(31,46,61,0.65)':C.parch}}>
         Check My Answers
       </button>
       {checked&&answers.every((a,i)=>a===tf[i].answer)&&<GoodAnswer text="All correct! Daviess is still remembered as a hero in Indiana." />}
@@ -1077,16 +1089,16 @@ function E7S1({ onComplete }: StageProps) {
     <div className="flex flex-col gap-4">
       <CtxBox>
         <p>The Battle of Tippecanoe was short — about two hours — but deadly. When dawn broke on November 7, 1811, Harrison's army counted their losses.</p>
-        <p>Historians have recorded that <strong style={{color:C.goldL}}>62 American soldiers</strong> were killed or mortally wounded, and about 126 more were injured. Estimates for Native casualties are harder to confirm — warriors removed their dead during and after the battle.</p>
-        <p>Before we reveal the number, try to guess how many American soldiers were killed.</p>
+        <p>Estimates for Native casualties are harder to confirm — warriors removed their dead during and after the battle.</p>
+        <p>Before we reveal the number, estimate how many American soldiers were killed or mortally wounded.</p>
       </CtxBox>
       <p className="font-semibold text-sm" style={{color:C.ink}}>How many American soldiers were killed or mortally wounded?</p>
       <div className="text-center py-3">
         <div className="text-5xl font-serif font-bold" style={{color:C.gold}}>{guess}</div>
-        <div className="text-xs mt-1" style={{color:C.ink,opacity:0.5}}>soldiers</div>
+        <div className="text-xs mt-1" style={{color:C.ink,opacity:0.75}}>soldiers</div>
       </div>
       <input type="range" min={5} max={150} value={guess} onChange={e=>setGuess(Number(e.target.value))} className="w-full" disabled={submitted}/>
-      <div className="flex justify-between text-xs" style={{color:C.ink,opacity:0.55}}><span>5</span><span>150</span></div>
+      <div className="flex justify-between text-xs" style={{color:C.ink,opacity:0.75}}><span>5</span><span>150</span></div>
       {!submitted&&<button onClick={handleSubmit} className="w-full py-3 rounded-xl font-bold" style={{background:C.steel,color:C.parch}}>Submit My Guess</button>}
       {submitted&&(
         <div className="rounded-2xl p-4" style={{background:'rgba(139,58,43,0.12)',border:`1px solid ${C.brick}`}}>
@@ -1129,16 +1141,16 @@ function E7S2({ onComplete }: StageProps) {
                 background:isRev?(g.type==='disguise'?'rgba(139,58,43,0.3)':'rgba(47,75,60,0.35)'):C.navyL,
                 border:`2px solid ${isRev?(g.type==='disguise'?C.brick:C.forest):'rgba(31,46,61,0.1)'}`}}>
               <div className="h-full flex flex-col items-center justify-center p-2 text-center gap-1">
-                {!isRev?(<><div className="text-2xl">⛰️</div><p className="text-xs" style={{color:'rgba(31,46,61,0.4)'}}>Tap</p></>):(
+                {!isRev?(<><div className="text-2xl">⛰️</div><p className="text-xs" style={{color:C.parch}}>Tap</p></>):(
                   <><div className="text-xl">{g.type==='disguise'?'🔥':'✝️'}</div>
-                  <p className="text-xs font-bold" style={{color:g.type==='disguise'?C.brickL:C.goldL}}>{g.type==='disguise'?'Disguise':'Grave'}</p></>
+                  <p className="text-xs font-bold" style={{color:g.type==='disguise'?C.brick:C.gold}}>{g.type==='disguise'?'Disguise':'Grave'}</p></>
                 )}
               </div>
             </div>
           )
         })}
       </div>
-      <div className="flex justify-between text-xs" style={{color:C.ink,opacity:0.6}}>
+      <div className="flex justify-between text-xs" style={{color:C.ink,opacity:0.75}}>
         <span>🔥 Disguises: {GRAVE_ITEMS.filter(g=>g.type==='disguise'&&revealed.has(g.id)).length}/4</span>
         <span>✝️ Graves: {GRAVE_ITEMS.filter(g=>g.type==='grave'&&revealed.has(g.id)).length}/2</span>
       </div>
@@ -1179,9 +1191,9 @@ function E7S3({ onComplete }: StageProps) {
       <div className="grid grid-cols-2 gap-3">
         {views.map((v,i)=>(
           <button key={i} onClick={()=>click(i)} className="p-4 rounded-2xl text-left transition-all duration-200"
-            style={{background:seen.has(i)?`${v.color}18`:C.navyL,border:`2px solid ${seen.has(i)?v.color:'rgba(31,46,61,0.1)'}`,color:C.parch}}>
+            style={{background:seen.has(i)?`${v.color}18`:C.navyL,border:`2px solid ${seen.has(i)?v.color:'rgba(31,46,61,0.1)'}`,color:seen.has(i)?C.ink:C.parch}}>
             <div className="text-2xl mb-1">{v.icon}</div>
-            <p className="text-xs font-bold" style={{color:seen.has(i)?v.color:'rgba(31,46,61,0.7)'}}>{v.label}</p>
+            <p className="text-xs font-bold" style={{color:seen.has(i)?v.color:C.parch}}>{v.label}</p>
             {seen.has(i)&&<span className="text-xs" style={{color:C.forestL}}>✓ Read</span>}
           </button>
         ))}
@@ -1192,7 +1204,7 @@ function E7S3({ onComplete }: StageProps) {
           <p className="text-sm leading-relaxed" style={{color:C.ink}}>{views[step].text}</p>
         </div>
       )}
-      <p className="text-xs text-center" style={{color:C.ink,opacity:0.4}}>{seen.size}/{views.length} perspectives read</p>
+      <p className="text-xs text-center" style={{color:C.ink,opacity:0.75}}>{seen.size}/{views.length} perspectives read</p>
       {seen.size===views.length&&<GoodAnswer text="All four perspectives read! History always looks different depending on where you're standing." />}
     </div>
   )
@@ -1272,13 +1284,13 @@ function E8S2({ onComplete }: StageProps) {
         <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{color:C.goldL}}>Quote {cur+1} of 4</p>
         <p className="font-serif text-lg italic leading-relaxed" style={{color:C.ink}}>"{q.text}"</p>
       </div>
-      <p className="text-sm text-center" style={{color:C.ink,opacity:0.6}}>💡 {q.hint}</p>
+      <p className="text-sm text-center" style={{color:C.ink,opacity:0.8}}>💡 {q.hint}</p>
       <div className="grid grid-cols-2 gap-3">
         {['Tecumseh','Tenskwatawa'].map(sp=>(
           <button key={sp} onClick={()=>pick(sp)}
             className="py-4 rounded-xl font-bold text-sm transition-all duration-200"
             style={{background:sel===sp?(sp===q.speaker?C.forest:C.brick):C.navyL,color:C.parch,
-              opacity:sel&&sel!==sp?0.4:1,border:`2px solid ${sel===sp?(sp===q.speaker?C.forestL:C.brickL):'rgba(31,46,61,0.12)'}`}}>
+              opacity:sel&&sel!==sp?0.7:1,border:`2px solid ${sel===sp?(sp===q.speaker?C.forestL:C.brickL):'rgba(31,46,61,0.12)'}`}}>
             {sp==='Tecumseh'?'🦅 Tecumseh':'🔮 Tenskwatawa'}
             {sel===sp&&(sp===q.speaker?' ✓':' ✗')}
           </button>
@@ -1315,10 +1327,10 @@ function E8S3({ onComplete }: StageProps) {
               return(
                 <button key={i} onClick={()=>setSeen(s=>{const n=new Set(s);n.add(key);return n})}
                   className="w-full text-left rounded-xl p-3 transition-all"
-                  style={{background:isSeen?`${p.color}15`:C.navyL,border:`1px solid ${isSeen?p.color:'rgba(31,46,61,0.08)'}`,color:C.parch}}>
+                  style={{background:isSeen?`${p.color}15`:C.navyL,border:`1px solid ${isSeen?p.color:'rgba(31,46,61,0.08)'}`,color:isSeen?C.ink:C.parch}}>
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-bold px-2 py-0.5 rounded" style={{background:`${p.color}33`,color:p.color}}>{e.year}</span>
-                    {isSeen?<p className="text-xs leading-relaxed">{e.text}</p>:<p className="text-xs" style={{color:'rgba(31,46,61,0.4)'}}>Tap to reveal…</p>}
+                    {isSeen?<p className="text-xs leading-relaxed">{e.text}</p>:<p className="text-xs" style={{color:C.ink}}>Tap to reveal…</p>}
                   </div>
                 </button>
               )
@@ -1326,7 +1338,7 @@ function E8S3({ onComplete }: StageProps) {
           </div>
         </div>
       ))}
-      <p className="text-xs text-center" style={{color:C.ink,opacity:0.4}}>{seen.size}/6 events revealed</p>
+      <p className="text-xs text-center" style={{color:C.ink,opacity:0.75}}>{seen.size}/6 events revealed</p>
     </div>
   )
 }
@@ -1371,7 +1383,7 @@ function E9S1({ onComplete }: StageProps) {
         {q.choices.map(c=>(
           <button key={c} onClick={()=>pick(c)} className="py-3 px-3 rounded-xl font-bold text-sm transition-all"
             style={{background:sel===c?(c===q.correct?C.forest:C.brick):C.navyL,color:C.parch,
-              opacity:sel&&sel!==c?0.4:1,border:`2px solid ${sel===c?(c===q.correct?C.forestL:C.brickL):'transparent'}`}}>
+              opacity:sel&&sel!==c?0.7:1,border:`2px solid ${sel===c?(c===q.correct?C.forestL:C.brickL):'transparent'}`}}>
             {c}{sel===c&&(c===q.correct?' ✓':' ✗')}
           </button>
         ))}
@@ -1417,8 +1429,8 @@ function E9S2({ onComplete }: StageProps) {
             const isM=!!matched[item.id]; const isSel=selL===item.id; const isW=wrong===item.id
             return(
               <button key={item.id} onClick={()=>tapL(item.id)} className={`py-3 px-3 rounded-xl text-left transition-all duration-200 ${isW?'animate-shake':''}`}
-                style={{background:isM?'rgba(47,75,60,0.35)':isSel?C.steel:C.navyL,color:isM?C.forestL:isSel?C.parch:C.parch,
-                  border:`2px solid ${isM?C.forest:isSel?C.steelL:'rgba(31,46,61,0.1)'}`,fontSize:12,opacity:isM?0.6:1}}>
+                style={{background:isM?'rgba(47,75,60,0.2)':isSel?C.steel:C.navyL,color:isM?C.ink:C.parch,
+                  border:`2px solid ${isM?C.forest:isSel?C.steelL:'rgba(31,46,61,0.1)'}`,fontSize:12}}>
                 <span className="mr-1">{item.emoji}</span>{item.label}{isM&&' ✓'}
               </button>
             )
@@ -1430,17 +1442,17 @@ function E9S2({ onComplete }: StageProps) {
             return(
               <button key={item.match} onClick={()=>tapR(item.match)}
                 className="py-3 px-3 rounded-xl text-left transition-all duration-200"
-                style={{background:isM?'rgba(47,75,60,0.35)':selL?C.navyL:'rgba(31,46,61,0.03)',
-                  color:C.parch,opacity:isM?0.5:1,fontSize:11,lineHeight:1.4,
+                style={{background:isM?'rgba(47,75,60,0.2)':selL?C.navyL:'rgba(31,46,61,0.03)',
+                  color:isM?C.ink:selL?C.parch:C.ink,fontSize:11,lineHeight:1.4,
                   border:`2px solid ${isM?C.forest:selL?'rgba(31,46,61,0.2)':'rgba(31,46,61,0.07)'}`,
                   cursor:selL&&!isM?'pointer':'default'}}>
-                {item.match}{isM&&<span className="block text-xs mt-0.5" style={{color:C.forestL}}>✓ Matched</span>}
+                {item.match}                {isM&&<span className="block text-xs mt-0.5" style={{color:C.forest}}>✓ Matched</span>}
               </button>
             )
           })}
         </div>
       </div>
-      <p className="text-xs text-center" style={{color:C.ink,opacity:0.4}}>{Object.keys(matched).length}/{RALLY_ITEMS.length} matched</p>
+      <p className="text-xs text-center" style={{color:C.ink,opacity:0.75}}>{Object.keys(matched).length}/{RALLY_ITEMS.length} matched</p>
       {Object.keys(matched).length===RALLY_ITEMS.length&&<GoodAnswer text="All matched! The Whig Party turned Tippecanoe into the biggest campaign symbol in American politics." />}
     </div>
   )
@@ -1463,7 +1475,7 @@ function E9S3({ onComplete }: StageProps) {
         <p className="text-center font-serif text-3xl font-bold mb-3" style={{color:C.ink}}>
           "_____ and Tyler Too!"
         </p>
-        <p className="text-xs text-center mb-4" style={{color:C.ink,opacity:0.55}}>Fill in the blank with Harrison's famous nickname</p>
+        <p className="text-xs text-center mb-4" style={{color:C.ink,opacity:0.75}}>Fill in the blank with Harrison's famous nickname</p>
         <div className="flex gap-2">
           <input type="text" value={filled} onChange={e=>setFilled(e.target.value)} disabled={submitted}
             placeholder="Type the word here…"
@@ -1565,7 +1577,7 @@ function E10S1({ onComplete }: StageProps) {
           <p className="text-sm leading-relaxed" style={{color:C.ink}}>{active.info}</p>
         </div>
       )}
-      <p className="text-xs text-center" style={{color:C.ink,opacity:0.4}}>{disc.size}/{HOTSPOTS.length} stories discovered</p>
+      <p className="text-xs text-center" style={{color:C.ink,opacity:0.75}}>{disc.size}/{HOTSPOTS.length} stories discovered</p>
     </div>
   )
 }
@@ -1593,15 +1605,15 @@ function E10S2({ onComplete }: StageProps) {
       <div className="space-y-3">
         {connections.map((c,i)=>(
           <div key={i} className="rounded-2xl p-4 transition-all duration-400"
-            style={{background:i<step?`${c.color}12`:C.navyL,border:`2px solid ${i<step?c.color:'rgba(31,46,61,0.08)'}`,opacity:i<=step?1:0.35}}>
+            style={{background:i<step?`${c.color}12`:'rgba(31,46,61,0.04)',border:`2px solid ${i<step?c.color:'rgba(31,46,61,0.12)'}`}}>
             {i<step?(
               <div className="flex items-center gap-3 flex-wrap">
                 <span className="text-sm font-semibold px-3 py-1.5 rounded-lg" style={{background:`${c.color}22`,color:c.color}}>{c.left}</span>
-                <span style={{color:'rgba(31,46,61,0.4)'}}>↔</span>
+                <span style={{color:C.ink}}>↔</span>
                 <span className="text-sm font-semibold px-3 py-1.5 rounded-lg" style={{background:`${c.color}22`,color:c.color}}>{c.right}</span>
               </div>
             ):(
-              <p className="text-sm" style={{color:'rgba(31,46,61,0.4)'}}>Connection {i+1} — Reveal below</p>
+              <p className="text-sm" style={{color:C.ink}}>Connection {i+1} — Reveal below</p>
             )}
           </div>
         ))}
@@ -1636,18 +1648,18 @@ function E10S3({ onComplete }: StageProps) {
         {facts.map((f,i)=>(
           <button key={i} onClick={()=>setRevealed(s=>{const n=new Set(s);n.add(i);return n})}
             className="w-full text-left rounded-2xl p-4 transition-all duration-300"
-            style={{background:revealed.has(i)?'rgba(74,111,165,0.15)':C.navyL,border:`2px solid ${revealed.has(i)?C.steel:'rgba(31,46,61,0.1)'}`,color:C.parch}}>
+            style={{background:revealed.has(i)?'rgba(74,111,165,0.15)':C.navyL,border:`2px solid ${revealed.has(i)?C.steel:'rgba(31,46,61,0.1)'}`,color:revealed.has(i)?C.ink:C.parch}}>
             <div className="flex items-start gap-3">
               <div className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold mt-0.5"
-                style={{background:revealed.has(i)?C.steel:C.navyL,border:`2px solid ${revealed.has(i)?C.steelL:'rgba(31,46,61,0.2)'}`,color:revealed.has(i)?C.parch:'rgba(31,46,61,0.4)'}}>
+                style={{background:revealed.has(i)?C.steel:C.navyL,border:`2px solid ${revealed.has(i)?C.steelL:'rgba(31,46,61,0.2)'}`,color:C.parch}}>
                 {revealed.has(i)?'✓':(i+1)}
               </div>
-              <p className="text-sm leading-relaxed" style={{opacity:revealed.has(i)?1:0.45}}>{f}</p>
+              <p className="text-sm leading-relaxed">{f}</p>
             </div>
           </button>
         ))}
       </div>
-      <p className="text-xs text-center" style={{color:C.ink,opacity:0.4}}>{revealed.size}/{facts.length} confirmed</p>
+      <p className="text-xs text-center" style={{color:C.ink,opacity:0.75}}>{revealed.size}/{facts.length} confirmed</p>
       {revealed.size===facts.length&&(
         <div className="rounded-2xl p-6 text-center" style={{background:'rgba(196,146,58,0.1)',border:`1px solid ${C.gold}`}}>
           <div className="text-4xl mb-2">🏛️</div>
@@ -1683,7 +1695,7 @@ export function EventShell({ meta, stage, totalStages, stagesDone, children, onN
           <span className="text-xs font-bold uppercase tracking-widest px-2 py-1 rounded" style={{ background: `${meta.accent}22`, color: meta.accent }}>
             Event {meta.id} of 10
           </span>
-          <span className="text-xs" style={{ color: C.ink, opacity: 0.6 }}>{meta.year}</span>
+          <span className="text-xs" style={{ color: C.ink, opacity: 0.75 }}>{meta.year}</span>
         </div>
         <h1 className="font-serif font-bold text-3xl leading-tight" style={{ color: C.ink }}>
           <span className="mr-3">{meta.icon}</span>{meta.title}
@@ -1695,11 +1707,11 @@ export function EventShell({ meta, stage, totalStages, stagesDone, children, onN
               <div className="flex items-center gap-1.5">
                 <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
                   style={{ background: i < stage ? C.forest : i === stage ? meta.accent : C.navyL,
-                    color: i <= stage ? C.parch : 'rgba(31,46,61,0.3)',
+                    color: i <= stage ? C.parch : 'rgba(243,236,221,0.72)',
                     border: `2px solid ${i < stage ? C.forestL : i === stage ? meta.accent : 'rgba(31,46,61,0.1)'}` }}>
                   {i < stage ? '✓' : i + 1}
                 </div>
-                <span className="text-xs hidden sm:block" style={{ color: i === stage ? C.ink : 'rgba(31,46,61,0.45)', fontWeight: i === stage ? 600 : 400 }}>{label}</span>
+                <span className="text-xs hidden sm:block" style={{ color: i === stage ? C.ink : 'rgba(31,46,61,0.72)', fontWeight: i === stage ? 600 : 400 }}>{label}</span>
               </div>
               {i < totalStages - 1 && <div className="w-4 h-px flex-shrink-0" style={{ background: i < stage ? C.forestL : 'rgba(31,46,61,0.1)' }} />}
             </div>
@@ -1729,7 +1741,7 @@ export function EventShell({ meta, stage, totalStages, stagesDone, children, onN
           <button onClick={onNext} disabled={!canNext}
             className="flex-1 py-3 rounded-xl font-bold text-base transition-all duration-200"
             style={{ background: canNext ? meta.accent : 'rgba(31,46,61,0.08)',
-              color: canNext ? C.parch : 'rgba(31,46,61,0.4)',
+              color: canNext ? C.parch : 'rgba(31,46,61,0.68)',
               cursor: canNext ? 'pointer' : 'default' }}>
             {!canNext ? '⟳ Complete the activity above' : isLastStage ? (isLastEvent ? '🏛️ Finish the Journey!' : `Complete Event ${meta.id} →`) : `Next: ${meta.stages[stage + 1]} →`}
           </button>
