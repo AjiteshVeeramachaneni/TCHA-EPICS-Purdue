@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { EVENTS, EventDisplay, C } from './events'
 import { ChatbotPrototype } from './ChatbotPrototype'
-import './lib/firebase'
+import { addCorrect, addIncorrect } from './lib/firebase'
 
 /* ─── PERSISTENCE ─── */
 function loadProgress(): { current: number; unlocked: number } {
@@ -291,8 +291,15 @@ function CompletionScreen({ onRestart, onViewEvent }: { onRestart: () => void; o
 export default function App() {
   const [screen, setScreen] = useState<'home' | 'events' | 'complete'>('home')
   const [{ current, unlocked }, setProgress] = useState(loadProgress)
+  const [firebaseError, setFirebaseError] = useState<string | null>(null)
 
   const hasProgress = unlocked > 1 || current > 1
+  const firebaseErrorNotice = firebaseError && (
+    <div role="alert" className="fixed top-4 left-1/2 z-50 -translate-x-1/2 rounded-xl px-4 py-3 text-sm shadow-lg"
+      style={{ background: C.brick, color: C.parch }}>
+      {firebaseError}
+    </div>
+  )
 
   const handleBegin = () => {
     localStorage.removeItem('tcha-v3')
@@ -306,7 +313,20 @@ export default function App() {
     window.scrollTo({ top: 0 })
   }
 
-  const handleEventComplete = () => {
+  const handleEventComplete = async (correct: number, incorrect: number) => {
+    try {
+      const answerWrites: Promise<void>[] = []
+      if (correct > 0) answerWrites.push(addCorrect(correct))
+      if (incorrect > 0) answerWrites.push(addIncorrect(incorrect))
+      if (answerWrites.length > 0) {
+        await Promise.all(answerWrites)
+        setFirebaseError(null)
+      }
+    } catch (error) {
+      console.error('Failed to save quiz results to Firebase.', error)
+      setFirebaseError('Your progress was saved, but quiz results could not be recorded. Please sign in and try again.')
+    }
+
     if (current === 10) {
       setScreen('complete')
       saveProgress(10, 10)
@@ -342,13 +362,19 @@ export default function App() {
   if (screen === 'home') {
     return (
       <>
+        {firebaseErrorNotice}
         <HomeScreen hasProgress={hasProgress} currentEvent={current} onBegin={handleBegin} onContinue={handleContinue} />
         <ChatbotPrototype onViewEvent={handleViewEvent} />
       </>
     )
   }
   if (screen === 'complete') {
-    return <CompletionScreen onRestart={handleRestart} onViewEvent={handleViewEvent} />
+    return (
+      <>
+        {firebaseErrorNotice}
+        <CompletionScreen onRestart={handleRestart} onViewEvent={handleViewEvent} />
+      </>
+    )
   }
 
   const currentMeta = EVENTS[current - 1]
@@ -356,6 +382,7 @@ export default function App() {
 
   return (
     <div className="event-daylight-screen" style={{ minHeight: '100vh', fontFamily: "'Source Sans 3', system-ui, sans-serif" }}>
+      {firebaseErrorNotice}
       {/* Top nav */}
       <nav className="sticky top-0 z-40" style={{ background: 'rgba(255,255,255,0.94)', backdropFilter: 'blur(12px)', borderBottom: '1px solid rgba(31,46,61,0.12)' }}>
         {/* Brand row */}

@@ -171,7 +171,8 @@ function ChapterIntro({ id, onComplete }: { id: number; onComplete: () => void }
 
 /* ─── SHARED COMPONENTS ─── */
 
-interface StageProps { onComplete: () => void }
+interface StageProps { onComplete: () => void; onAnswer: (correct: boolean) => void }
+interface AnswerCounts { correct: number; incorrect: number }
 
 function CtxBox({ children }: { children: React.ReactNode }) {
   return (
@@ -231,7 +232,7 @@ const STARS = [[8,12],[15,35],[22,8],[32,18],[42,30],[55,5],[62,22],[70,14],[80,
 
 /* ═══════════════ EVENT 1: ECLIPSE ═══════════════ */
 
-function E1S1({ onComplete }: StageProps) {
+function E1S1({ onComplete, onAnswer }: StageProps) {
   const [slider, setSlider] = useState(0)
   const [eclipsed, setEclipsed] = useState(false)
   const [choice, setChoice] = useState<string | null>(null)
@@ -239,7 +240,12 @@ function E1S1({ onComplete }: StageProps) {
   const isEclipse = dist < 8
 
   const go = (v: number) => { setSlider(v); if (Math.abs(v - 50) < 8) setEclipsed(true) }
-  const pick = (yr: string) => { if (choice) return; setChoice(yr); if (yr === '1806') setTimeout(onComplete, 1300) }
+  const pick = (yr: string) => {
+    if (choice) return
+    setChoice(yr)
+    onAnswer(yr === '1806')
+    if (yr === '1806') setTimeout(onComplete, 1300)
+  }
 
   return (
     <div className="flex flex-col items-center gap-5">
@@ -300,9 +306,14 @@ function E1S1({ onComplete }: StageProps) {
   )
 }
 
-function E1S2({ onComplete }: StageProps) {
+function E1S2({ onComplete, onAnswer }: StageProps) {
   const [choice, setChoice] = useState<string|null>(null)
-  const pick = (k: string) => { if (choice) return; setChoice(k); if (k==='b') setTimeout(onComplete,1300) }
+  const pick = (k: string) => {
+    if (choice) return
+    setChoice(k)
+    onAnswer(k === 'b')
+    if (k==='b') setTimeout(onComplete,1300)
+  }
   return (
     <div className="flex flex-col gap-4">
       <CtxBox>
@@ -353,7 +364,7 @@ const VINCENNES_CHARS = [
   {name:'Shabonee',clues:["He was a Potawatomi leader and warrior","He was an ally and close companion of Tecumseh","He would later play a key role during the actual battle"],options:['Tecumseh','Black Hawk','Shabonee'],emoji:'⚡'},
 ]
 
-function E2S1({ onComplete }: StageProps) {
+function E2S1({ onComplete, onAnswer }: StageProps) {
   const [cur,setCur]=useState(0)
   const [sel,setSel]=useState<string|null>(null)
   const [score,setScore]=useState(0)
@@ -361,6 +372,7 @@ function E2S1({ onComplete }: StageProps) {
   const char=VINCENNES_CHARS[cur]
   const pick=(n:string)=>{
     if(sel)return; setSel(n)
+    onAnswer(n === char.name)
     if(n===char.name)setScore(s=>s+1)
     setTimeout(()=>{ if(cur<VINCENNES_CHARS.length-1){setCur(c=>c+1);setSel(null)}else setDone(true) },1700)
   }
@@ -412,7 +424,7 @@ const DEMANDS = [
   {clue:'Tecumseh opposed further land sales',prompt:'Stop',ending:'.'},
 ]
 
-function E2S2({ onComplete }: StageProps) {
+function E2S2({ onComplete, onAnswer }: StageProps) {
   const [answers,setAnswers]=useState<(string|null)[]>([null,null,null])
   const [checked,setChecked]=useState(false)
   const choices=[['Fort Wayne Treaty','Greenville Treaty','Paris Treaty'],['only the Shawnee','every Native nation','the United States'],['all future land sales','more land sales','smaller payments']]
@@ -420,6 +432,7 @@ function E2S2({ onComplete }: StageProps) {
   const allCorrect=answers.every((a,i)=>a===correct[i])
   const check=()=>{
     setChecked(true)
+    answers.forEach((answer, i) => onAnswer(answer === correct[i]))
     if(allCorrect)setTimeout(onComplete,1400)
   }
   return(
@@ -580,7 +593,7 @@ function E3S1({ onComplete }: StageProps) {
   )
 }
 
-function E3S2({ onComplete }: StageProps) {
+function E3S2({ onComplete, onAnswer }: StageProps) {
   const items=[
     {id:'powder',label:'🔫 Gunpowder & Muskets',correct:true,reason:'Essential — soldiers needed ammunition for the coming battle.'},
     {id:'food',label:'🍞 Food Rations (30 days)',correct:true,reason:'The march was 150 miles through wilderness. Food was critical.'},
@@ -597,6 +610,7 @@ function E3S2({ onComplete }: StageProps) {
   const check=()=>{
     setChecked(true)
     const correct=items.filter(i=>i.correct).map(i=>i.id)
+    items.forEach(item => onAnswer(selected.has(item.id) === item.correct))
     if(correct.every(c=>selected.has(c))&&[...selected].every(s=>items.find(i=>i.id===s)?.correct))setTimeout(onComplete,1500)
     else setTimeout(onComplete,3000)
   }
@@ -638,11 +652,15 @@ function E3S2({ onComplete }: StageProps) {
   )
 }
 
-function E3S3({ onComplete }: StageProps) {
+function E3S3({ onComplete, onAnswer }: StageProps) {
   const [guess,setGuess]=useState(7)
   const [submitted,setSubmitted]=useState(false)
   const accuracy=Math.abs(guess-10)
-  const handleSubmit=()=>{ setSubmitted(true); setTimeout(onComplete,2200) }
+  const handleSubmit=()=>{
+    setSubmitted(true)
+    onAnswer(accuracy <= 2)
+    setTimeout(onComplete,2200)
+  }
   return(
     <div className="flex flex-col gap-5">
       <CtxBox>
@@ -677,7 +695,7 @@ const ATTACK_BLANKS=[
 ]
 const ATTACK_BANK=['4:15','sentinel',"Barton's",'Geiger','midnight','scout','Harrison','Spencer']
 
-function E4S1({ onComplete }: StageProps) {
+function E4S1({ onComplete, onAnswer }: StageProps) {
   const [filled,setFilled]=useState<(string|null)[]>([null,null,null,null])
   const [checked,setChecked]=useState(false)
   const next=filled.findIndex(f=>f===null)
@@ -685,6 +703,7 @@ function E4S1({ onComplete }: StageProps) {
   const clear=(i:number)=>{ if(checked)return; const n=[...filled];n[i]=null;setFilled(n) }
   const check=()=>{
     setChecked(true)
+    filled.forEach((answer, i) => onAnswer(answer === ATTACK_BLANKS[i].answer))
     if(filled.every((f,i)=>f===ATTACK_BLANKS[i].answer))setTimeout(onComplete,1600)
   }
   const allCorrect=checked&&filled.every((f,i)=>f===ATTACK_BLANKS[i].answer)
@@ -792,7 +811,7 @@ function E4S2({ onComplete }: StageProps) {
   )
 }
 
-function E4S3({ onComplete }: StageProps) {
+function E4S3({ onComplete, onAnswer }: StageProps) {
   const events=[
     {text:"Harrison's army camps on the ridge, one mile from Prophet's Town"},
     {text:"Tenskwatawa performs a ceremony and sends warriors out under cover of darkness"},
@@ -802,11 +821,20 @@ function E4S3({ onComplete }: StageProps) {
   ]
   const [order,setOrder]=useState([2,0,4,1,3])
   const [checked,setChecked]=useState(false)
-  const [moved,setMoved]=useState<number|null>(null)
-  const moveUp=(i:number)=>{ if(i===0)return; const n=[...order];[n[i-1],n[i]]=[n[i],n[i-1]];setOrder(n) }
-  const moveDown=(i:number)=>{ if(i===order.length-1)return; const n=[...order];[n[i],n[i+1]]=[n[i+1],n[i]];setOrder(n) }
+  const moveUp=(i:number)=>{
+    if(i===0)return
+    const n=[...order];[n[i-1],n[i]]=[n[i],n[i-1]];setOrder(n);setChecked(false)
+  }
+  const moveDown=(i:number)=>{
+    if(i===order.length-1)return
+    const n=[...order];[n[i],n[i+1]]=[n[i+1],n[i]];setOrder(n);setChecked(false)
+  }
   const correct=[0,1,2,3,4]
-  const check=()=>{ setChecked(true); if(order.every((v,i)=>v===correct[i]))setTimeout(onComplete,1400) }
+  const check=()=>{
+    setChecked(true)
+    order.forEach((value, i) => onAnswer(value === correct[i]))
+    if(order.every((v,i)=>v===correct[i]))setTimeout(onComplete,1400)
+  }
   return(
     <div className="flex flex-col gap-4">
       <CtxBox>
@@ -820,10 +848,10 @@ function E4S3({ onComplete }: StageProps) {
           return(
             <div key={idx} className="flex items-center gap-2">
               <div className="flex flex-col gap-1">
-                <button onClick={()=>moveUp(i)} disabled={i===0||checked} className="w-6 h-5 rounded text-xs font-bold transition-all"
-                  style={{background:i===0||checked?'rgba(31,46,61,0.05)':'rgba(31,46,61,0.1)',color:'rgba(31,46,61,0.75)'}}>▲</button>
-                <button onClick={()=>moveDown(i)} disabled={i===order.length-1||checked} className="w-6 h-5 rounded text-xs font-bold"
-                  style={{background:i===order.length-1||checked?'rgba(31,46,61,0.05)':'rgba(31,46,61,0.1)',color:'rgba(31,46,61,0.75)'}}>▼</button>
+                <button onClick={()=>moveUp(i)} disabled={i===0} className="w-6 h-5 rounded text-xs font-bold transition-all"
+                  style={{background:i===0?'rgba(31,46,61,0.05)':'rgba(31,46,61,0.1)',color:'rgba(31,46,61,0.75)'}}>▲</button>
+                <button onClick={()=>moveDown(i)} disabled={i===order.length-1} className="w-6 h-5 rounded text-xs font-bold"
+                  style={{background:i===order.length-1?'rgba(31,46,61,0.05)':'rgba(31,46,61,0.1)',color:'rgba(31,46,61,0.75)'}}>▼</button>
               </div>
               <div className="flex-1 rounded-xl px-3 py-2.5 transition-all duration-300"
                 style={{background:correct2?'rgba(47,75,60,0.35)':wrong2?'rgba(139,58,43,0.25)':C.navyL,
@@ -848,12 +876,17 @@ function E4S3({ onComplete }: StageProps) {
 
 /* ═══════════════ EVENT 5: SHABONEE'S RAID ═══════════════ */
 
-function E5S1({ onComplete }: StageProps) {
+function E5S1({ onComplete, onAnswer }: StageProps) {
   const [view,setView]=useState<'shabonee'|'harrison'>('shabonee')
   const [seen,setSeen]=useState(new Set(['shabonee']))
   const [choice,setChoice]=useState<string|null>(null)
   const toggle=(v:'shabonee'|'harrison')=>{ setView(v); setSeen(s=>new Set([...s,v])) }
-  const pick=(k:string)=>{ if(choice)return; setChoice(k); if(k==='horse')setTimeout(onComplete,1400) }
+  const pick=(k:string)=>{
+    if(choice)return
+    setChoice(k)
+    onAnswer(k === 'horse')
+    if(k==='horse')setTimeout(onComplete,1400)
+  }
   return(
     <div className="flex flex-col gap-4">
       <CtxBox>
@@ -940,9 +973,14 @@ function E5S2({ onComplete }: StageProps) {
   )
 }
 
-function E5S3({ onComplete }: StageProps) {
+function E5S3({ onComplete, onAnswer }: StageProps) {
   const [choice,setChoice]=useState<string|null>(null)
-  const pick=(k:string)=>{ if(choice)return; setChoice(k); setTimeout(onComplete,1400) }
+  const pick=(k:string)=>{
+    if(choice)return
+    setChoice(k)
+    onAnswer(k === 'b')
+    setTimeout(onComplete,1400)
+  }
   return(
     <div className="flex flex-col gap-4">
       <CtxBox>
@@ -1038,7 +1076,7 @@ function E6S2({ onComplete }: StageProps) {
   )
 }
 
-function E6S3({ onComplete }: StageProps) {
+function E6S3({ onComplete, onAnswer }: StageProps) {
   const tf=[
     {text:"Daviess County, Indiana is named after Major Daviess.",answer:true},
     {text:"Major Daviess survived the battle and went home to Kentucky.",answer:false,explain:"He died from his wounds after the battle."},
@@ -1048,7 +1086,11 @@ function E6S3({ onComplete }: StageProps) {
   const [answers,setAnswers]=useState<(boolean|null)[]>([null,null,null,null])
   const [checked,setChecked]=useState(false)
   const pick=(i:number,v:boolean)=>{ if(checked)return; setAnswers(a=>{const n=[...a];n[i]=v;return n}) }
-  const check=()=>{ setChecked(true); if(answers.every((a,i)=>a===tf[i].answer))setTimeout(onComplete,1400) }
+  const check=()=>{
+    setChecked(true)
+    answers.forEach((answer, i) => onAnswer(answer === tf[i].answer))
+    if(answers.every((a,i)=>a===tf[i].answer))setTimeout(onComplete,1400)
+  }
   return(
     <div className="flex flex-col gap-4">
       <p className="text-sm font-semibold" style={{color:C.ink}}>True or False? Answer all four, then check.</p>
@@ -1079,12 +1121,16 @@ function E6S3({ onComplete }: StageProps) {
 
 /* ═══════════════ EVENT 7: BURYING THE DEAD ═══════════════ */
 
-function E7S1({ onComplete }: StageProps) {
+function E7S1({ onComplete, onAnswer }: StageProps) {
   const [guess,setGuess]=useState(30)
   const [submitted,setSubmitted]=useState(false)
   const actual=62
   const diff=Math.abs(guess-actual)
-  const handleSubmit=()=>{ setSubmitted(true); setTimeout(onComplete,2500) }
+  const handleSubmit=()=>{
+    setSubmitted(true)
+    onAnswer(diff <= 10)
+    setTimeout(onComplete,2500)
+  }
   return(
     <div className="flex flex-col gap-4">
       <CtxBox>
@@ -1119,12 +1165,17 @@ const GRAVE_ITEMS=[
   {id:6,type:'disguise',label:'Mound F',info:"Another disguise — Harrison's men worked to hide as many graves as possible before departing."},
 ]
 
-function E7S2({ onComplete }: StageProps) {
+function E7S2({ onComplete, onAnswer }: StageProps) {
   const [revealed,setRevealed]=useState(new Set<number>())
   const [choice,setChoice]=useState<string|null>(null)
   const all=revealed.size===GRAVE_ITEMS.length
   const rev=(id:number)=>setRevealed(s=>{const n=new Set(s);n.add(id);return n})
-  const pick=(k:string)=>{ if(choice)return; setChoice(k); if(k==='honor')setTimeout(onComplete,1400) }
+  const pick=(k:string)=>{
+    if(choice)return
+    setChoice(k)
+    onAnswer(k === 'honor')
+    if(k==='honor')setTimeout(onComplete,1400)
+  }
   return(
     <div className="flex flex-col gap-4">
       <CtxBox>
@@ -1256,13 +1307,13 @@ const WHO_SAID=[
   {text:'"You have destroyed everything I worked for!"',speaker:'Tecumseh',hint:'He said this when he returned and confronted his brother in January 1812.'},
 ]
 
-function E8S2({ onComplete }: StageProps) {
+function E8S2({ onComplete, onAnswer }: StageProps) {
   const [cur,setCur]=useState(0)
   const [sel,setSel]=useState<string|null>(null)
   const [score,setScore]=useState(0)
   const [done,setDone]=useState(false)
   const q=WHO_SAID[cur]
-  const pick=(sp:string)=>{ if(sel)return; setSel(sp); if(sp===q.speaker)setScore(s=>s+1)
+  const pick=(sp:string)=>{ if(sel)return; setSel(sp); onAnswer(sp === q.speaker); if(sp===q.speaker)setScore(s=>s+1)
     setTimeout(()=>{ if(cur<WHO_SAID.length-1){setCur(c=>c+1);setSel(null)}else setDone(true) },1800) }
   if(done)return(
     <div className="flex flex-col items-center gap-4 py-4">
@@ -1345,7 +1396,7 @@ function E8S3({ onComplete }: StageProps) {
 
 /* ═══════════════ EVENT 9: WHIG RALLY ═══════════════ */
 
-function E9S1({ onComplete }: StageProps) {
+function E9S1({ onComplete, onAnswer }: StageProps) {
   const facts=[
     {q:'How many people came to the rally?',a:'~30,000',choices:['~5,000','~30,000','~300','~100,000'],correct:'~30,000',explain:"About 30,000 people traveled from across Indiana and beyond — enormous for 1840."},
     {q:'How long was the parade procession?',a:'One mile',choices:['One block','Half a mile','One mile','Five miles'],correct:'One mile',explain:"The procession stretched a full mile — floats, bands, horses, and thousands of people on foot."},
@@ -1356,7 +1407,7 @@ function E9S1({ onComplete }: StageProps) {
   const [score,setScore]=useState(0)
   const [done,setDone]=useState(false)
   const q=facts[cur]
-  const pick=(c:string)=>{ if(sel)return; setSel(c); if(c===q.correct)setScore(s=>s+1)
+  const pick=(c:string)=>{ if(sel)return; setSel(c); onAnswer(c === q.correct); if(c===q.correct)setScore(s=>s+1)
     setTimeout(()=>{ if(cur<facts.length-1){setCur(c2=>c2+1);setSel(null)}else setDone(true) },1900) }
   if(done)return(
     <div className="flex flex-col items-center gap-4 py-4">
@@ -1402,7 +1453,7 @@ const RALLY_ITEMS=[
   {id:'flag',emoji:'🏳️',label:"Spencer's Battle Flag",match:'The actual bullet-riddled flag from the 1811 battle, carried in the procession'},
 ]
 
-function E9S2({ onComplete }: StageProps) {
+function E9S2({ onComplete, onAnswer }: StageProps) {
   const [selL,setSelL]=useState<string|null>(null)
   const [matched,setMatched]=useState<Record<string,string>>({})
   const [wrong,setWrong]=useState<string|null>(null)
@@ -1412,9 +1463,10 @@ function E9S2({ onComplete }: StageProps) {
     if(!selL)return
     const item=RALLY_ITEMS.find(i=>i.id===selL)!
     if(item.match===match){
+      onAnswer(true)
       const nm={...matched,[selL]:match}; setMatched(nm); setSelL(null)
       if(Object.keys(nm).length===RALLY_ITEMS.length)setTimeout(onComplete,1500)
-    }else{ setWrong(selL); setTimeout(()=>{setWrong(null);setSelL(null)},700) }
+    }else{ onAnswer(false); setWrong(selL); setTimeout(()=>{setWrong(null);setSelL(null)},700) }
   }
   return(
     <div className="flex flex-col gap-4">
@@ -1458,13 +1510,22 @@ function E9S2({ onComplete }: StageProps) {
   )
 }
 
-function E9S3({ onComplete }: StageProps) {
+function E9S3({ onComplete, onAnswer }: StageProps) {
   const [filled,setFilled]=useState('')
   const [submitted,setSubmitted]=useState(false)
   const [choice,setChoice]=useState<string|null>(null)
   const isCorrect=filled.toLowerCase().trim()==='tippecanoe'
-  const submit=()=>{ if(!filled.trim())return; setSubmitted(true); if(isCorrect)setTimeout(()=>{},200) }
-  const pick=(k:string)=>{ if(choice)return; setChoice(k); if(k==='win')setTimeout(onComplete,1400) }
+  const submit=()=>{
+    if(!filled.trim())return
+    setSubmitted(true)
+    onAnswer(isCorrect)
+  }
+  const pick=(k:string)=>{
+    if(choice)return
+    setChoice(k)
+    onAnswer(k === 'win')
+    if(k==='win')setTimeout(onComplete,1400)
+  }
   return(
     <div className="flex flex-col gap-4">
       <CtxBox>
@@ -1756,17 +1817,23 @@ export function EventShell({ meta, stage, totalStages, stagesDone, children, onN
 function makeEvent(id: number, gameStages: React.FC<StageProps>[]) {
   const IntroStage = ({ onComplete }: StageProps) => <ChapterIntro id={id} onComplete={onComplete} />
   const allStages = [IntroStage, ...gameStages]
-  return function EventN({ onComplete }: { onComplete: () => void }) {
+  return function EventN({ onComplete }: { onComplete: (correct: number, incorrect: number) => void }) {
     const meta = EVENTS[id - 1]
     const [stage, setStage] = useState(0)
     const [done, setDone] = useState<boolean[]>(allStages.map(() => false))
+    const answerCounts = useRef<AnswerCounts>({ correct: 0, incorrect: 0 })
+    const recordAnswer = (correct: boolean) => {
+      answerCounts.current[correct ? 'correct' : 'incorrect'] += 1
+    }
     const markDone = (i: number) => setDone(d => { const n = [...d]; n[i] = true; return n })
     const Stage = allStages[stage]
     return (
       <EventShell meta={meta} stage={stage} totalStages={allStages.length} stagesDone={done}
-        onNext={() => stage < allStages.length - 1 ? setStage(s => s + 1) : onComplete()}
+        onNext={() => stage < allStages.length - 1
+          ? setStage(s => s + 1)
+          : onComplete(answerCounts.current.correct, answerCounts.current.incorrect)}
         onPrev={() => setStage(s => s - 1)} isLastStage={stage === allStages.length - 1} isLastEvent={id === 10}>
-        <Stage key={stage} onComplete={() => markDone(stage)} />
+        <Stage key={stage} onComplete={() => markDone(stage)} onAnswer={recordAnswer} />
       </EventShell>
     )
   }
@@ -1787,7 +1854,7 @@ const Event10 = makeEvent(10, [E10S1, E10S2, E10S3])
 
 const EVENT_COMPONENTS = [Event1, Event2, Event3, Event4, Event5, Event6, Event7, Event8, Event9, Event10]
 
-export function EventDisplay({ eventId, onComplete }: { eventId: number; onComplete: () => void }) {
+export function EventDisplay({ eventId, onComplete }: { eventId: number; onComplete: (correct: number, incorrect: number) => void }) {
   const Comp = EVENT_COMPONENTS[eventId - 1]
   return <Comp key={eventId} onComplete={onComplete} />
 }
