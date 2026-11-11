@@ -1,0 +1,22 @@
+{"id": "w01", "split": "dev", "group": "answerable", "question": "How many people came to the Whig rally at the battle ground?", "expect": ["30,000", "20,000 and 40,000"]}
+{"id": "w02", "split": "dev", "group": "answerable", "question": "Why did the Whigs put log cabins and barrels of hard cider at their rallies?", "expect": ["a log cabin and a barrel of hard cider"]}
+{"id": "w03", "split": "dev", "group": "answerable", "question": "What food was served at the rally?", "expect": ["burgoo"]}
+{"id": "w04", "split": "dev", "group": "answerable", "question": "Who was given the flag from Captain Spencer's company?", "expect": ["James Brooks"]}
+{"id": "w05", "split": "dev", "group": "answerable", "question": "Why did Judge Polke give the old flag away?", "expect": ["wasn't a coward"]}
+{"id": "w06", "split": "dev", "group": "answerable", "question": "What was the canoe float in the parade?", "expect": ["Tip-pe-canoe"]}
+{"id": "w07", "split": "dev", "group": "answerable", "question": "Did anyone get hurt during the rally?", "expect": ["not a single accident"]}
+{"id": "w08", "split": "dev", "group": "answerable", "question": "How did the 1840 rally change political campaigns?", "expect": ["campaign songs became a standard feature"]}
+{"id": "w09", "split": "dev", "group": "answerable", "question": "Who did the Whigs pick instead of Henry Clay?", "expect": ["Harrison, who had run against Van Buren"]}
+{"id": "w10", "split": "dev", "group": "answerable", "question": "How long was the parade to the battle ground?", "expect": ["two miles long", "at least a mile long"]}
+{"id": "w11", "split": "dev", "group": "answerable", "question": "What did the banners say about Van Buren?", "expect": ["Stop that barrel", "take the Treasury"]}
+{"id": "w12", "split": "dev", "group": "answerable", "question": "What did Elijah Edwards and his family make flags from?", "expect": ["pillow slips"]}
+{"id": "w13", "split": "dev", "group": "answerable", "question": "Why did farmers leave their fields to go to the rally?", "expect": ["fields unplanted"]}
+{"id": "w14", "split": "dev", "group": "answerable", "question": "Why was the country in trouble before the Whig Party started?", "expect": ["depressed economic state"]}
+{"id": "o01", "split": "dev", "group": "out_of_scope", "question": "What is the capital of France?", "expect": []}
+{"id": "o02", "split": "dev", "group": "out_of_scope", "question": "How do I bake chocolate chip cookies?", "expect": []}
+{"id": "o03", "split": "dev", "group": "out_of_scope", "question": "Who won the Super Bowl last year?", "expect": []}
+{"id": "o04", "split": "dev", "group": "out_of_scope", "question": "How does photosynthesis work?", "expect": []}
+{"id": "o05", "split": "dev", "group": "out_of_scope", "question": "What happened at the Battle of Gettysburg?", "expect": []}
+{"id": "o06", "split": "dev", "group": "out_of_scope", "question": "What is your favorite video game?", "expect": []}
+{"id": "o07", "split": "dev", "group": "out_of_scope", "question": "Who was the first person to walk on the moon?", "expect": []}
+{"id": "o08", "split": "dev", "group": "out_of_scope", "question": "What is the tallest mountain in the world?", "expect": []}

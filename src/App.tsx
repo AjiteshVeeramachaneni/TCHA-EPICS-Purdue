@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { EVENTS, EventDisplay, C } from './events'
+import { EVENTS, EventDisplay, C, FREE_NAVIGATION } from './events'
 import { ChatbotPrototype } from './ChatbotPrototype'
 
 /* ─── PERSISTENCE ─── */
@@ -319,7 +319,7 @@ export default function App() {
   }
 
   const goTo = (id: number) => {
-    if (id <= unlocked) {
+    if (FREE_NAVIGATION || id <= unlocked) {
       setProgress(p => ({ ...p, current: id }))
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
@@ -379,7 +379,7 @@ export default function App() {
         <div className="overflow-x-auto px-5 py-3" style={{ scrollbarWidth: 'none' }}>
           <div className="flex items-start justify-between gap-1" style={{ minWidth: 480 }}>
             {EVENTS.map(e => {
-              const state = e.id === current ? 'current' : e.id < unlocked ? 'done' : e.id <= unlocked ? 'available' : 'locked'
+              const state = e.id === current ? 'current' : e.id < unlocked ? 'done' : (FREE_NAVIGATION || e.id <= unlocked) ? 'available' : 'locked'
               return <NavDot key={e.id} event={e} state={state} onClick={() => goTo(e.id)} />
             })}
           </div>

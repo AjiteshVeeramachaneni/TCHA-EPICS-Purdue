@@ -1,0 +1,903 @@
+{
+  "timestamp": "2026-11-11T09:29:35",
+  "settings": {
+    "split": "dev",
+    "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "chunk_target_chars": 600,
+    "top_k": 4,
+    "threshold": 0.35,
+    "rrf_k": 60,
+    "passages": 25,
+    "documents": [
+      "whig"
+    ]
+  },
+  "modes": {
+    "bm25": {
+      "recall_at_k": 0.929,
+      "mrr": 0.81,
+      "answerable_passed_gate": 1.0,
+      "out_of_scope_redirected": 0.875,
+      "questions": [
+        {
+          "id": "w01",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6596,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-4",
+            "whig-I-7",
+            "whig-II-10",
+            "whig-II-3"
+          ]
+        },
+        {
+          "id": "w02",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.4841,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-3",
+            "whig-I-6",
+            "whig-I-9",
+            "whig-I-4"
+          ]
+        },
+        {
+          "id": "w03",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5482,
+          "rank": 1,
+          "top_sources": [
+            "whig-II-3",
+            "whig-I-2",
+            "whig-II-5",
+            "whig-I-4"
+          ]
+        },
+        {
+          "id": "w04",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5395,
+          "rank": 1,
+          "top_sources": [
+            "whig-II-5",
+            "whig-II-6",
+            "whig-II-4",
+            "whig-II-3"
+          ]
+        },
+        {
+          "id": "w05",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6168,
+          "rank": 1,
+          "top_sources": [
+            "whig-II-5",
+            "whig-II-7",
+            "whig-I-5",
+            "whig-II-6"
+          ]
+        },
+        {
+          "id": "w06",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5223,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-5",
+            "whig-I-6",
+            "whig-I-0",
+            "whig-I-1"
+          ]
+        },
+        {
+          "id": "w07",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5702,
+          "rank": null,
+          "top_sources": [
+            "whig-I-3",
+            "whig-II-9",
+            "whig-I-4",
+            "whig-I-10"
+          ]
+        },
+        {
+          "id": "w08",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6121,
+          "rank": 1,
+          "top_sources": [
+            "whig-II-13",
+            "whig-I-4",
+            "whig-II-12",
+            "whig-II-11"
+          ]
+        },
+        {
+          "id": "w09",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5388,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-2",
+            "whig-I-3",
+            "whig-I-1",
+            "whig-II-9"
+          ]
+        },
+        {
+          "id": "w10",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5271,
+          "rank": 3,
+          "top_sources": [
+            "whig-II-2",
+            "whig-I-7",
+            "whig-I-10",
+            "whig-I-5"
+          ]
+        },
+        {
+          "id": "w11",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6304,
+          "rank": 2,
+          "top_sources": [
+            "whig-I-0",
+            "whig-I-9",
+            "whig-I-2",
+            "whig-I-8"
+          ]
+        },
+        {
+          "id": "w12",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.363,
+          "rank": 2,
+          "top_sources": [
+            "whig-I-4",
+            "whig-I-6",
+            "whig-I-5",
+            "whig-II-2"
+          ]
+        },
+        {
+          "id": "w13",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6847,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-7",
+            "whig-II-7",
+            "whig-I-4",
+            "whig-I-3"
+          ]
+        },
+        {
+          "id": "w14",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6393,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-0",
+            "whig-II-10",
+            "whig-I-1",
+            "whig-II-13"
+          ]
+        },
+        {
+          "id": "o01",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1199,
+          "rank": null,
+          "top_sources": [
+            "whig-I-0",
+            "whig-I-1",
+            "whig-I-2",
+            "whig-I-3"
+          ]
+        },
+        {
+          "id": "o02",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1662,
+          "rank": null,
+          "top_sources": [
+            "whig-I-0",
+            "whig-I-1",
+            "whig-I-2",
+            "whig-I-3"
+          ]
+        },
+        {
+          "id": "o03",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1237,
+          "rank": null,
+          "top_sources": [
+            "whig-I-4",
+            "whig-II-8",
+            "whig-II-1",
+            "whig-II-3"
+          ]
+        },
+        {
+          "id": "o04",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.0933,
+          "rank": null,
+          "top_sources": [
+            "whig-I-7",
+            "whig-I-0",
+            "whig-I-1",
+            "whig-I-2"
+          ]
+        },
+        {
+          "id": "o05",
+          "group": "out_of_scope",
+          "status": "ok",
+          "best_cosine": 0.4921,
+          "rank": null,
+          "top_sources": [
+            "whig-II-2",
+            "whig-II-5",
+            "whig-I-4",
+            "whig-II-1"
+          ]
+        },
+        {
+          "id": "o06",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1595,
+          "rank": null,
+          "top_sources": [
+            "whig-I-0",
+            "whig-I-1",
+            "whig-I-2",
+            "whig-I-3"
+          ]
+        },
+        {
+          "id": "o07",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.2372,
+          "rank": null,
+          "top_sources": [
+            "whig-I-1",
+            "whig-II-9",
+            "whig-I-0",
+            "whig-I-2"
+          ]
+        },
+        {
+          "id": "o08",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1351,
+          "rank": null,
+          "top_sources": [
+            "whig-I-0",
+            "whig-I-1",
+            "whig-I-2",
+            "whig-I-3"
+          ]
+        }
+      ]
+    },
+    "embedding": {
+      "recall_at_k": 0.929,
+      "mrr": 0.685,
+      "answerable_passed_gate": 1.0,
+      "out_of_scope_redirected": 0.875,
+      "questions": [
+        {
+          "id": "w01",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6596,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-4",
+            "whig-II-12",
+            "whig-I-7",
+            "whig-I-1"
+          ]
+        },
+        {
+          "id": "w02",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.4841,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-3",
+            "whig-I-9",
+            "whig-I-5",
+            "whig-I-4"
+          ]
+        },
+        {
+          "id": "w03",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5482,
+          "rank": 4,
+          "top_sources": [
+            "whig-I-7",
+            "whig-I-4",
+            "whig-II-12",
+            "whig-II-3"
+          ]
+        },
+        {
+          "id": "w04",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5395,
+          "rank": 1,
+          "top_sources": [
+            "whig-II-5",
+            "whig-II-6",
+            "whig-II-7",
+            "whig-II-9"
+          ]
+        },
+        {
+          "id": "w05",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6168,
+          "rank": 1,
+          "top_sources": [
+            "whig-II-5",
+            "whig-II-9",
+            "whig-II-6",
+            "whig-I-8"
+          ]
+        },
+        {
+          "id": "w06",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5223,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-5",
+            "whig-I-6",
+            "whig-I-7",
+            "whig-I-10"
+          ]
+        },
+        {
+          "id": "w07",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5702,
+          "rank": 2,
+          "top_sources": [
+            "whig-I-7",
+            "whig-II-12",
+            "whig-I-4",
+            "whig-II-10"
+          ]
+        },
+        {
+          "id": "w08",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6121,
+          "rank": 2,
+          "top_sources": [
+            "whig-I-4",
+            "whig-II-13",
+            "whig-II-12",
+            "whig-II-11"
+          ]
+        },
+        {
+          "id": "w09",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5388,
+          "rank": 2,
+          "top_sources": [
+            "whig-I-1",
+            "whig-I-2",
+            "whig-II-9",
+            "whig-I-0"
+          ]
+        },
+        {
+          "id": "w10",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5271,
+          "rank": 2,
+          "top_sources": [
+            "whig-I-7",
+            "whig-I-10",
+            "whig-II-2",
+            "whig-II-12"
+          ]
+        },
+        {
+          "id": "w11",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6304,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-8",
+            "whig-I-9",
+            "whig-II-9",
+            "whig-II-5"
+          ]
+        },
+        {
+          "id": "w12",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.363,
+          "rank": null,
+          "top_sources": [
+            "whig-I-8",
+            "whig-II-9",
+            "whig-II-7",
+            "whig-II-6"
+          ]
+        },
+        {
+          "id": "w13",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6847,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-7",
+            "whig-II-12",
+            "whig-I-4",
+            "whig-II-2"
+          ]
+        },
+        {
+          "id": "w14",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6393,
+          "rank": 3,
+          "top_sources": [
+            "whig-I-1",
+            "whig-II-13",
+            "whig-I-0",
+            "whig-II-11"
+          ]
+        },
+        {
+          "id": "o01",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1199,
+          "rank": null,
+          "top_sources": [
+            "whig-II-6",
+            "whig-II-8",
+            "whig-II-11",
+            "whig-I-9"
+          ]
+        },
+        {
+          "id": "o02",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1662,
+          "rank": null,
+          "top_sources": [
+            "whig-II-3",
+            "whig-I-6",
+            "whig-II-5",
+            "whig-I-4"
+          ]
+        },
+        {
+          "id": "o03",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1237,
+          "rank": null,
+          "top_sources": [
+            "whig-II-3",
+            "whig-II-8",
+            "whig-I-3",
+            "whig-I-7"
+          ]
+        },
+        {
+          "id": "o04",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.0933,
+          "rank": null,
+          "top_sources": [
+            "whig-I-7",
+            "whig-II-3",
+            "whig-I-6",
+            "whig-I-2"
+          ]
+        },
+        {
+          "id": "o05",
+          "group": "out_of_scope",
+          "status": "ok",
+          "best_cosine": 0.4921,
+          "rank": null,
+          "top_sources": [
+            "whig-II-2",
+            "whig-I-7",
+            "whig-II-12",
+            "whig-II-1"
+          ]
+        },
+        {
+          "id": "o06",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1595,
+          "rank": null,
+          "top_sources": [
+            "whig-II-1",
+            "whig-II-8",
+            "whig-II-0",
+            "whig-II-4"
+          ]
+        },
+        {
+          "id": "o07",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.2372,
+          "rank": null,
+          "top_sources": [
+            "whig-I-6",
+            "whig-I-7",
+            "whig-I-10",
+            "whig-II-5"
+          ]
+        },
+        {
+          "id": "o08",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1351,
+          "rank": null,
+          "top_sources": [
+            "whig-II-2",
+            "whig-II-6",
+            "whig-II-3",
+            "whig-I-10"
+          ]
+        }
+      ]
+    },
+    "hybrid": {
+      "recall_at_k": 1.0,
+      "mrr": 0.863,
+      "answerable_passed_gate": 1.0,
+      "out_of_scope_redirected": 0.875,
+      "questions": [
+        {
+          "id": "w01",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6596,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-4",
+            "whig-I-7",
+            "whig-II-12",
+            "whig-II-9"
+          ]
+        },
+        {
+          "id": "w02",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.4841,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-3",
+            "whig-I-9",
+            "whig-I-4",
+            "whig-I-6"
+          ]
+        },
+        {
+          "id": "w03",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5482,
+          "rank": 1,
+          "top_sources": [
+            "whig-II-3",
+            "whig-I-4",
+            "whig-I-7",
+            "whig-II-12"
+          ]
+        },
+        {
+          "id": "w04",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5395,
+          "rank": 1,
+          "top_sources": [
+            "whig-II-5",
+            "whig-II-6",
+            "whig-II-4",
+            "whig-II-7"
+          ]
+        },
+        {
+          "id": "w05",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6168,
+          "rank": 1,
+          "top_sources": [
+            "whig-II-5",
+            "whig-II-9",
+            "whig-II-6",
+            "whig-II-7"
+          ]
+        },
+        {
+          "id": "w06",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5223,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-5",
+            "whig-I-6",
+            "whig-I-7",
+            "whig-I-10"
+          ]
+        },
+        {
+          "id": "w07",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5702,
+          "rank": 4,
+          "top_sources": [
+            "whig-I-4",
+            "whig-II-9",
+            "whig-I-7",
+            "whig-II-12"
+          ]
+        },
+        {
+          "id": "w08",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6121,
+          "rank": 2,
+          "top_sources": [
+            "whig-I-4",
+            "whig-II-13",
+            "whig-II-12",
+            "whig-II-11"
+          ]
+        },
+        {
+          "id": "w09",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5388,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-2",
+            "whig-I-1",
+            "whig-II-9",
+            "whig-I-3"
+          ]
+        },
+        {
+          "id": "w10",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.5271,
+          "rank": 3,
+          "top_sources": [
+            "whig-I-7",
+            "whig-II-2",
+            "whig-I-10",
+            "whig-I-4"
+          ]
+        },
+        {
+          "id": "w11",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6304,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-9",
+            "whig-I-8",
+            "whig-I-0",
+            "whig-I-2"
+          ]
+        },
+        {
+          "id": "w12",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.363,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-6",
+            "whig-I-8",
+            "whig-II-2",
+            "whig-I-7"
+          ]
+        },
+        {
+          "id": "w13",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6847,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-7",
+            "whig-I-4",
+            "whig-II-12",
+            "whig-II-9"
+          ]
+        },
+        {
+          "id": "w14",
+          "group": "answerable",
+          "status": "ok",
+          "best_cosine": 0.6393,
+          "rank": 1,
+          "top_sources": [
+            "whig-I-0",
+            "whig-I-1",
+            "whig-II-13",
+            "whig-II-10"
+          ]
+        },
+        {
+          "id": "o01",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1199,
+          "rank": null,
+          "top_sources": [
+            "whig-I-9",
+            "whig-I-1",
+            "whig-II-6",
+            "whig-I-5"
+          ]
+        },
+        {
+          "id": "o02",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1662,
+          "rank": null,
+          "top_sources": [
+            "whig-I-0",
+            "whig-I-6",
+            "whig-I-4",
+            "whig-I-3"
+          ]
+        },
+        {
+          "id": "o03",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1237,
+          "rank": null,
+          "top_sources": [
+            "whig-II-8",
+            "whig-II-3",
+            "whig-II-1",
+            "whig-I-3"
+          ]
+        },
+        {
+          "id": "o04",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.0933,
+          "rank": null,
+          "top_sources": [
+            "whig-I-7",
+            "whig-I-2",
+            "whig-I-6",
+            "whig-I-1"
+          ]
+        },
+        {
+          "id": "o05",
+          "group": "out_of_scope",
+          "status": "ok",
+          "best_cosine": 0.4921,
+          "rank": null,
+          "top_sources": [
+            "whig-II-2",
+            "whig-II-1",
+            "whig-I-7",
+            "whig-I-4"
+          ]
+        },
+        {
+          "id": "o06",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1595,
+          "rank": null,
+          "top_sources": [
+            "whig-I-6",
+            "whig-II-1",
+            "whig-II-0",
+            "whig-I-5"
+          ]
+        },
+        {
+          "id": "o07",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.2372,
+          "rank": null,
+          "top_sources": [
+            "whig-I-6",
+            "whig-I-7",
+            "whig-II-9",
+            "whig-I-10"
+          ]
+        },
+        {
+          "id": "o08",
+          "group": "out_of_scope",
+          "status": "redirect",
+          "best_cosine": 0.1351,
+          "rank": null,
+          "top_sources": [
+            "whig-I-4",
+            "whig-I-5",
+            "whig-II-2",
+            "whig-I-10"
+          ]
+        }
+      ]
+    }
+  },
+  "gate": {
+    "lowest_answerable_cosine": 0.363,
+    "highest_out_of_scope_cosine": 0.4921
+  }
+}

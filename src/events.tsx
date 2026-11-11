@@ -182,12 +182,16 @@ function CtxBox({ children }: { children: React.ReactNode }) {
   )
 }
 
-function FactCards({ cards }: { cards: { icon: string; title: string; body: string }[] }) {
+function FactCards({ cards, onReveal }: { cards: { icon: string; title: string; body: string }[]; onReveal?: (i: number) => void }) {
   const [flipped, setFlipped] = useState<Set<number>>(new Set())
+  const toggle = (i: number) => {
+    if (!flipped.has(i)) onReveal?.(i)
+    setFlipped(s => { const n = new Set(s); n.has(i) ? n.delete(i) : n.add(i); return n })
+  }
   return (
     <div className="space-y-3">
       {cards.map((c, i) => (
-        <div key={i} onClick={() => setFlipped(s => { const n = new Set(s); n.has(i) ? n.delete(i) : n.add(i); return n })}
+        <div key={i} onClick={() => toggle(i)}
           className="rounded-2xl p-4 cursor-pointer transition-all duration-300"
           style={{ background: flipped.has(i) ? 'rgba(196,146,58,0.1)' : 'rgba(31,46,61,0.05)', border: `1px solid ${flipped.has(i) ? C.gold : 'rgba(31,46,61,0.1)'}` }}>
           <div className="flex items-center gap-3">
@@ -236,7 +240,7 @@ function E1S1({ onComplete }: StageProps) {
   const isEclipse = dist < 8
 
   const go = (v: number) => { setSlider(v); if (Math.abs(v - 50) < 8) setEclipsed(true) }
-  const pick = (yr: string) => { if (choice) return; setChoice(yr); if (yr === '1806') setTimeout(onComplete, 1300) }
+  const pick = (yr: string) => { if (choice === '1806') return; setChoice(yr); if (yr === '1806') setTimeout(onComplete, 1300) }
 
   return (
     <div className="flex flex-col items-center gap-5">
@@ -279,7 +283,7 @@ function E1S1({ onComplete }: StageProps) {
           <p className="font-semibold text-sm mb-3" style={{color:C.ink}}>You caused an eclipse! Now — what year did Tenskwatawa actually predict this?</p>
           <div className="grid grid-cols-2 gap-2">
             {['1804','1806','1808','1812'].map(yr => (
-              <button key={yr} onClick={()=>pick(yr)} disabled={!!choice}
+              <button key={yr} onClick={()=>pick(yr)} disabled={choice==='1806'}
                 className="py-2.5 rounded-xl font-bold text-base transition-all duration-200"
                 style={{background:choice===yr?(yr==='1806'?C.forest:C.brick):C.navyL,color:C.parch,
                   border:`2px solid ${choice===yr?(yr==='1806'?C.forestL:C.brickL):'transparent'}`,
@@ -299,7 +303,7 @@ function E1S1({ onComplete }: StageProps) {
 
 function E1S2({ onComplete }: StageProps) {
   const [choice, setChoice] = useState<string|null>(null)
-  const pick = (k: string) => { if (choice) return; setChoice(k); if (k==='b') setTimeout(onComplete,1300) }
+  const pick = (k: string) => { if (choice==='b') return; setChoice(k); if (k==='b') setTimeout(onComplete,1300) }
   return (
     <div className="flex flex-col gap-4">
       <CtxBox>
@@ -330,12 +334,12 @@ function E1S3({ onComplete }: StageProps) {
     {icon:'🏘️',title:"Prophet's Town grows",body:"After the eclipse, Prophet's Town at the junction of the Tippecanoe and Wabash rivers swelled to over 1,000 people — Shawnee, Delaware, Potawatomi, Kickapoo, and others. It became the largest Native settlement in Indiana."},
     {icon:'📖',title:"Tenskwatawa's message",body:"The Prophet taught that Native people should return to traditional ways and reject European goods — no metal tools, no alcohol, no clothing made by white traders. He believed this would restore the power that Native nations had lost."},
   ]
-  const click = (i:number) => { setSeen(s=>{const n=new Set(s);n.add(i);return n}); if (seen.size===2) setTimeout(onComplete,500) }
-  useEffect(()=>{ if(seen.size===3) onComplete() },[seen])
+  const reveal = (i:number) => setSeen(s=>{const n=new Set(s);n.add(i);return n})
+  useEffect(()=>{ if(seen.size===cards.length) onComplete() },[seen])
   return (
     <div className="flex flex-col gap-4">
       <p className="text-sm" style={{color:C.ink,opacity:0.7}}>Tap each card to learn more about this moment in history.</p>
-      <FactCards cards={cards} />
+      <FactCards cards={cards} onReveal={reveal} />
       {seen.size===3&&<GoodAnswer text="You've uncovered all three facts. On to the next event!" />}
     </div>
   )
@@ -841,7 +845,7 @@ function E5S1({ onComplete }: StageProps) {
   const [seen,setSeen]=useState(new Set(['shabonee']))
   const [choice,setChoice]=useState<string|null>(null)
   const toggle=(v:'shabonee'|'harrison')=>{ setView(v); setSeen(s=>new Set([...s,v])) }
-  const pick=(k:string)=>{ if(choice)return; setChoice(k); if(k==='horse')setTimeout(onComplete,1400) }
+  const pick=(k:string)=>{ if(choice==='horse')return; setChoice(k); if(k==='horse')setTimeout(onComplete,1400) }
   return(
     <div className="flex flex-col gap-4">
       <CtxBox>
@@ -1112,7 +1116,7 @@ function E7S2({ onComplete }: StageProps) {
   const [choice,setChoice]=useState<string|null>(null)
   const all=revealed.size===GRAVE_ITEMS.length
   const rev=(id:number)=>setRevealed(s=>{const n=new Set(s);n.add(id);return n})
-  const pick=(k:string)=>{ if(choice)return; setChoice(k); if(k==='honor')setTimeout(onComplete,1400) }
+  const pick=(k:string)=>{ if(choice==='honor')return; setChoice(k); if(k==='honor')setTimeout(onComplete,1400) }
   return(
     <div className="flex flex-col gap-4">
       <CtxBox>
@@ -1452,7 +1456,7 @@ function E9S3({ onComplete }: StageProps) {
   const [choice,setChoice]=useState<string|null>(null)
   const isCorrect=filled.toLowerCase().trim()==='tippecanoe'
   const submit=()=>{ if(!filled.trim())return; setSubmitted(true); if(isCorrect)setTimeout(()=>{},200) }
-  const pick=(k:string)=>{ if(choice)return; setChoice(k); if(k==='win')setTimeout(onComplete,1400) }
+  const pick=(k:string)=>{ if(choice==='win')return; setChoice(k); if(k==='win')setTimeout(onComplete,1400) }
   return(
     <div className="flex flex-col gap-4">
       <CtxBox>
@@ -1661,6 +1665,9 @@ function E10S3({ onComplete }: StageProps) {
 
 /* ═══════════════════════════ EVENT SHELL ═══════════════════════════ */
 
+/** Testing switch: unlock every event and allow skipping stages. Set to false before launch. */
+export const FREE_NAVIGATION = true
+
 interface EventShellProps {
   meta: EventMeta
   stage: number
@@ -1674,7 +1681,8 @@ interface EventShellProps {
 }
 
 export function EventShell({ meta, stage, totalStages, stagesDone, children, onNext, onPrev, isLastStage, isLastEvent }: EventShellProps) {
-  const canNext = stagesDone[stage]
+  const stageDone = stagesDone[stage]
+  const canNext = stageDone || FREE_NAVIGATION
   return (
     <div className="event-light" style={{ maxWidth: 560, margin: '0 auto', padding: '0 0 100px' }}>
       {/* Event header */}
@@ -1706,7 +1714,7 @@ export function EventShell({ meta, stage, totalStages, stagesDone, children, onN
           ))}
         </div>
         <div className="mt-2 h-0.5 rounded-full" style={{ background: 'rgba(31,46,61,0.06)' }}>
-          <div className="h-0.5 rounded-full transition-all duration-700" style={{ width: `${((stage + (canNext ? 1 : 0)) / totalStages) * 100}%`, background: meta.accent }} />
+          <div className="h-0.5 rounded-full transition-all duration-700" style={{ width: `${((stage + (stageDone ? 1 : 0)) / totalStages) * 100}%`, background: meta.accent }} />
         </div>
       </div>
 
@@ -1731,7 +1739,7 @@ export function EventShell({ meta, stage, totalStages, stagesDone, children, onN
             style={{ background: canNext ? meta.accent : 'rgba(31,46,61,0.08)',
               color: canNext ? C.parch : 'rgba(31,46,61,0.4)',
               cursor: canNext ? 'pointer' : 'default' }}>
-            {!canNext ? '⟳ Complete the activity above' : isLastStage ? (isLastEvent ? '🏛️ Finish the Journey!' : `Complete Event ${meta.id} →`) : `Next: ${meta.stages[stage + 1]} →`}
+            {!canNext ? '⟳ Complete the activity above' : `${stageDone ? '' : 'Skip · '}${isLastStage ? (isLastEvent ? '🏛️ Finish the Journey!' : `Complete Event ${meta.id} →`) : `Next: ${meta.stages[stage + 1]} →`}`}
           </button>
         </div>
       </div>
